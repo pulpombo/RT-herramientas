@@ -300,6 +300,198 @@
                 transform: scale(1.02);
                 background-color: var(--hover-color);
             }
+
+            @media (max-width: 768px) {
+                .contenedor-principal {
+                    flex-direction: column;
+                    gap: 20px;
+                    padding: 10px;
+                    height: auto;
+                    margin: 10px;
+                    max-width: 100%;
+                }
+
+                .registro-lista,
+                .formulario-container {
+                    min-width: unset;
+                    width: 100%;
+                    max-height: none;
+                    padding: 15px;
+                    margin-bottom: 20px;
+                }
+
+                .titulo-principal {
+                    font-size: 2em;
+                    padding: 10px;
+                    margin-top: 60px; /* Espacio para el botón de inicio */
+                }
+
+                .saludo {
+                    font-size: 1em;
+                    padding: 0 15px;
+                    margin-bottom: 20px;
+                }
+
+                /* Mejorar la visualización de los formularios */
+                .form-group {
+                    margin-bottom: 15px;
+                }
+
+                select,
+                input,
+                textarea {
+                    padding: 15px;
+                    font-size: 16px; /* Previene el zoom automático en iOS */
+                    margin-bottom: 8px;
+                }
+
+                /* Mejorar la visualización de los registros */
+                .registro-item {
+                    padding: 15px;
+                    margin-bottom: 10px;
+                    font-size: 0.9em;
+                }
+
+                .registro-item p {
+                    margin: 8px 0;
+                }
+
+                /* Mejorar los botones */
+                button {
+                    width: 100%;
+                    margin: 5px 0;
+                    padding: 15px;
+                    font-size: 1em;
+                }
+
+                .botones-edicion {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 10px;
+                }
+
+                /* Ajustar el botón de inicio */
+                .inicio-btn {
+                    position: fixed;
+                    top: 10px;
+                    right: 10px;
+                    z-index: 1000;
+                    padding: 10px 20px;
+                    font-size: 0.9em;
+                }
+
+                /* Ajustar el botón de modo oscuro */
+                .modo-oscuro-btn {
+                    position: fixed;
+                    top: 10px;
+                    left: 10px;
+                    z-index: 1000;
+                    padding: 10px 20px;
+                    font-size: 0.9em;
+                }
+
+                /* Mejorar el scroll */
+                .registro-lista {
+                    -webkit-overflow-scrolling: touch; /* Scroll suave en iOS */
+                    max-height: 50vh;
+                }
+
+                /* Añadir espacio al final para evitar que el contenido se oculte detrás de los botones fijos */
+                body {
+                    padding-bottom: 70px;
+                }
+
+                /* Mejorar la visualización de los elementos editables */
+                .registro-item.editando {
+                    padding: 10px;
+                }
+
+                .registro-item.editando .form-group {
+                    margin-bottom: 10px;
+                }
+
+                /* Ajustar el tamaño de los textos */
+                label {
+                    font-size: 0.9em;
+                }
+
+                small {
+                    font-size: 0.8em;
+                }
+
+                /* Mejorar la visualización de mensajes de error */
+                #IMEI:invalid {
+                    border-color: #ff3b30;
+                }
+
+                /* Agregar feedback táctil */
+                button:active,
+                select:active,
+                input:active {
+                    transform: scale(0.98);
+                }
+            }
+
+            /* Mejoras generales para la accesibilidad */
+            :focus {
+                outline: 2px solid var(--button-bg);
+                outline-offset: 2px;
+            }
+
+            /* Animaciones más suaves */
+            @keyframes fadeIn {
+                from {
+                    opacity: 0;
+                }
+                to {
+                    opacity: 1;
+                }
+            }
+
+            .registro-item {
+                animation: fadeIn 0.3s ease-in-out;
+            }
+
+            /* Mejorar la legibilidad en modo oscuro */
+            :root[data-theme="dark"] .descripcion {
+                background-color: rgba(255, 255, 255, 0.1);
+                color: #e0e0e0;
+            }
+
+            /* Mejoras en el contraste */
+            :root[data-theme="dark"] .registro-item {
+                border: 1px solid rgba(255, 255, 255, 0.1);
+            }
+
+            /* Asegurar que los inputs sean legibles en modo oscuro */
+            :root[data-theme="dark"] input,
+            :root[data-theme="dark"] select,
+            :root[data-theme="dark"] textarea {
+                background-color: rgba(255, 255, 255, 0.1);
+                color: #ffffff;
+            }
+
+            /* Mejorar la visualización de placeholders */
+            :root[data-theme="dark"] input::placeholder,
+            :root[data-theme="dark"] textarea::placeholder {
+                color: rgba(255, 255, 255, 0.5);
+            }
+
+            /* Indicadores de estado más claros */
+            .boton-guardar:disabled,
+            .boton-cancelar:disabled {
+                opacity: 0.5;
+                cursor: not-allowed;
+            }
+
+            /* Transiciones más suaves */
+            .registro-item,
+            button,
+            input,
+            select,
+            textarea {
+                transition: all 0.2s ease-in-out;
+            }
         </style>
     </head>
 
