@@ -31,553 +31,553 @@
                 --button-bg: #0077ed;
             }
 
-            * {
-                margin: 0;
-                padding: 0;
-                box-sizing: border-box;
-                font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, sans-serif;
-                -webkit-font-smoothing: antialiased;
-            }
-
-            body {
-                font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, sans-serif;
-                padding: 20px;
-                margin: 0;
-                background-color: var(--bg-color);
-                color: var(--text-color);
-                transition: all 0.3s ease;
-                line-height: 1.47059;
-                letter-spacing: -0.022em;
-                min-height: 100vh;
-                display: flex;
-                flex-direction: column;
-                overflow: hidden;
-            }
-
-            .modo-oscuro-btn {
-                position: absolute;
-                top: 10px;
-                left: 10px;
-                padding: 12px 24px;
-                background-color: var(--button-bg);
-                color: white;
-                border: none;
-                border-radius: 980px;
-                cursor: pointer;
-                font-size: 1em;
-                font-weight: 500;
-                transition: all 0.3s ease;
-            }
-
-            .modo-oscuro-btn:hover {
-                transform: scale(1.02);
-                background-color: var(--hover-color);
-            }
-
-            .contenedor-principal {
-                display: flex;
-                gap: 30px;
-                max-width: 90%;
-                margin: 20px auto 40px auto;
-                padding: 0 20px;
-                height: calc(100vh - 250px);
-            }
-
-            .titulo-principal {
-                text-align: center;
-                font-size: 3.5em;
-                margin-bottom: 10px;
-                font-weight: 600;
-                letter-spacing: -0.003em;
-            }
-
-            .letra-r {
-                color: #ffd700;
-            }
-
-            .letra-t {
-                color: #800080;
-            }
-
-            .saludo {
-                text-align: center;
-                font-size: 1.2em;
-                margin-bottom: 30px;
-                color: var(--secondary-text);
-                font-weight: 400;
-            }
-
-            .inicio-btn {
-                position: absolute;
-                top: 10px;
-                right: 10px;
-                padding: 12px 24px;
-                background-color: var(--button-bg);
-                color: white;
-                border: none;
-                border-radius: 980px;
-                cursor: pointer;
-                font-size: 1em;
-                font-weight: 500;
-                transition: all 0.3s ease;
-                text-decoration: none;
-            }
-
-            .inicio-btn:hover {
-                transform: scale(1.02);
-                background-color: var(--hover-color);
-            }
-
-                .registro-lista,
-                .formulario-container {
-                    flex: 1;
-                    min-width: 700px;
-                    background-color: var(--container-bg);
-                    border-radius: 20px;
-                    box-shadow: 0 2px 4px var(--shadow-color);
-                    padding: 30px;
-                    overflow-y: auto;
-                    max-height: 100%;
-                    border: 1px solid var(--border-color);
+                * {
+                    margin: 0;
+                    padding: 0;
+                    box-sizing: border-box;
+                    font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, sans-serif;
+                    -webkit-font-smoothing: antialiased;
                 }
 
-                .form-group {
-                    margin-bottom: 20px;
-                }
-
-                label {
-                    display: block;
-                    margin-bottom: 8px;
-                    font-weight: 500;
+                body {
+                    font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, sans-serif;
+                    padding: 20px;
+                    margin: 0;
+                    background-color: var(--bg-color);
                     color: var(--text-color);
-                }
-
-                select,
-                input,
-                textarea {
-                    width: 100%;
-                    padding: 12px;
-                    margin-bottom: 10px;
-                    background-color: var(--item-bg);
-                    color: var(--text-color);
-                    border: 1px solid var(--border-color);
-                    border-radius: 12px;
-                    font-size: 1em;
                     transition: all 0.3s ease;
+                    line-height: 1.47059;
+                    letter-spacing: -0.022em;
+                    min-height: 100vh;
+                    display: flex;
+                    flex-direction: column;
+                    overflow: hidden;
                 }
 
-                select:focus,
-                input:focus,
-                textarea:focus {
-                    outline: none;
-                    border-color: var(--button-bg);
-                    box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.2);
-                }
-
-                button {
+                .modo-oscuro-btn {
+                    position: absolute;
+                    top: 10px;
+                    left: 10px;
                     padding: 12px 24px;
                     background-color: var(--button-bg);
                     color: white;
                     border: none;
                     border-radius: 980px;
                     cursor: pointer;
-                    margin-right: 10px;
                     font-size: 1em;
                     font-weight: 500;
                     transition: all 0.3s ease;
                 }
 
-                button:hover {
+                .modo-oscuro-btn:hover {
                     transform: scale(1.02);
                     background-color: var(--hover-color);
                 }
 
-                .registro-item {
-                    background-color: var(--item-bg);
-                    padding: 20px;
-                    margin-bottom: 15px;
-                    border-radius: 14px;
-                    border: 1px solid var(--border-color);
-                    transition: all 0.3s ease;
+                .contenedor-principal {
+                    display: flex;
+                    gap: 30px;
+                    max-width: 90%;
+                    margin: 20px auto 40px auto;
+                    padding: 0 20px;
+                    height: calc(100vh - 250px);
                 }
 
-                .registro-item:hover {
-                    transform: scale(1.01);
-                    box-shadow: 0 4px 12px var(--shadow-color);
+                .titulo-principal {
+                    text-align: center;
+                    font-size: 3.5em;
+                    margin-bottom: 10px;
+                    font-weight: 600;
+                    letter-spacing: -0.003em;
                 }
 
-                .registro-item p {
-                    margin: 12px 0;
-                    font-size: 0.95em;
+                .letra-r {
+                    color: #ffd700;
                 }
 
-                .registro-item strong {
-                    font-weight: 500;
+                .letra-t {
+                    color: #800080;
                 }
 
-                .boton-eliminar {
-                    background-color: #ff3b30;
-                }
-
-                .boton-editar {
-                    background-color: #34c759;
-                }
-
-                .boton-guardar {
-                    background-color: #34c759;
-                }
-
-                .boton-cancelar {
-                    background-color: #ff3b30;
-                }
-
-                #IMEI:invalid {
-                    border-color: #ff3b30;
-                }
-
-                #IMEI:valid {
-                    border-color: #34c759;
-                }
-
-                small {
-                    font-size: 0.85em;
+                .saludo {
+                    text-align: center;
+                    font-size: 1.2em;
+                    margin-bottom: 30px;
                     color: var(--secondary-text);
-                    display: block;
-                    margin-top: 4px;
+                    font-weight: 400;
                 }
 
-                /* Scrollbar */
-                ::-webkit-scrollbar {
-                    width: 8px;
+                .inicio-btn {
+                    position: absolute;
+                    top: 10px;
+                    right: 10px;
+                    padding: 12px 24px;
+                    background-color: var(--button-bg);
+                    color: white;
+                    border: none;
+                    border-radius: 980px;
+                    cursor: pointer;
+                    font-size: 1em;
+                    font-weight: 500;
+                    transition: all 0.3s ease;
+                    text-decoration: none;
                 }
 
-                ::-webkit-scrollbar-track {
-                    background: var(--bg-color);
-                    border-radius: 4px;
+                .inicio-btn:hover {
+                    transform: scale(1.02);
+                    background-color: var(--hover-color);
                 }
-
-                ::-webkit-scrollbar-thumb {
-                    background: var(--secondary-text);
-                    border-radius: 4px;
-                }
-
-                ::-webkit-scrollbar-thumb:hover {
-                    background: var(--text-color);
-                }
-
-                /* Firefox */
-                * {
-                    scrollbar-width: thin;
-                    scrollbar-color: var(--secondary-text) var(--bg-color);
-                }
-                @media (max-width: 768px) {
-                    .contenedor-principal {
-                        flex-direction: column;
-                        gap: 20px;
-                        padding: 10px;
-                        height: auto;
-                        margin: 10px;
-                        max-width: 100%;
-                    }
 
                     .registro-lista,
                     .formulario-container {
-                        min-width: unset;
-                        width: 100%;
-                        max-height: none;
-                        padding: 15px;
-                        margin-bottom: 20px;
+                        flex: 1;
+                        min-width: 700px;
+                        background-color: var(--container-bg);
+                        border-radius: 20px;
+                        box-shadow: 0 2px 4px var(--shadow-color);
+                        padding: 30px;
+                        overflow-y: auto;
+                        max-height: 100%;
+                        border: 1px solid var(--border-color);
                     }
 
-                    .titulo-principal {
-                        font-size: 2em;
-                        padding: 10px;
-                        margin-top: 60px; /* Espacio para el botón de inicio */
-                    }
-
-                    .saludo {
-                        font-size: 1em;
-                        padding: 0 15px;
-                        margin-bottom: 20px;
-                    }
-
-                    /* Mejorar la visualización de los formularios */
                     .form-group {
-                        margin-bottom: 15px;
+                        margin-bottom: 20px;
+                    }
+
+                    label {
+                        display: block;
+                        margin-bottom: 8px;
+                        font-weight: 500;
+                        color: var(--text-color);
                     }
 
                     select,
                     input,
                     textarea {
-                        padding: 15px;
-                        font-size: 16px; /* Previene el zoom automático en iOS */
-                        margin-bottom: 8px;
+                        width: 100%;
+                        padding: 12px;
+                        margin-bottom: 10px;
+                        background-color: var(--item-bg);
+                        color: var(--text-color);
+                        border: 1px solid var(--border-color);
+                        border-radius: 12px;
+                        font-size: 1em;
+                        transition: all 0.3s ease;
                     }
 
-                    /* Mejorar la visualización de los registros */
+                    select:focus,
+                    input:focus,
+                    textarea:focus {
+                        outline: none;
+                        border-color: var(--button-bg);
+                        box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.2);
+                    }
+
+                    button {
+                        padding: 12px 24px;
+                        background-color: var(--button-bg);
+                        color: white;
+                        border: none;
+                        border-radius: 980px;
+                        cursor: pointer;
+                        margin-right: 10px;
+                        font-size: 1em;
+                        font-weight: 500;
+                        transition: all 0.3s ease;
+                    }
+
+                    button:hover {
+                        transform: scale(1.02);
+                        background-color: var(--hover-color);
+                    }
+
                     .registro-item {
-                        padding: 15px;
-                        margin-bottom: 10px;
-                        font-size: 0.9em;
+                        background-color: var(--item-bg);
+                        padding: 20px;
+                        margin-bottom: 15px;
+                        border-radius: 14px;
+                        border: 1px solid var(--border-color);
+                        transition: all 0.3s ease;
+                    }
+
+                    .registro-item:hover {
+                        transform: scale(1.01);
+                        box-shadow: 0 4px 12px var(--shadow-color);
                     }
 
                     .registro-item p {
-                        margin: 8px 0;
+                        margin: 12px 0;
+                        font-size: 0.95em;
                     }
 
-                    /* Mejorar los botones */
-                    button {
-                        width: 100%;
-                        margin: 5px 0;
-                        padding: 15px;
-                        font-size: 1em;
+                    .registro-item strong {
+                        font-weight: 500;
                     }
 
-                    .botones-edicion {
-                        display: flex;
-                        flex-direction: column;
-                        gap: 10px;
+                    .boton-eliminar {
+                        background-color: #ff3b30;
                     }
 
-                    /* Ajustar el botón de inicio */
-                    .inicio-btn {
-                        position: fixed;
-                        top: 10px;
-                        right: 10px;
-                        z-index: 1000;
-                        padding: 10px 20px;
-                        font-size: 0.9em;
+                    .boton-editar {
+                        background-color: #34c759;
                     }
 
-                    /* Ajustar el botón de modo oscuro */
-                    .modo-oscuro-btn {
-                        position: fixed;
-                        top: 10px;
-                        left: 10px;
-                        z-index: 1000;
-                        padding: 10px 20px;
-                        font-size: 0.9em;
+                    .boton-guardar {
+                        background-color: #34c759;
                     }
 
-                    .registro-lista,
-                            .formulario-container {
-                                flex: 1;
-                                min-width: 700px;
-                                background-color: var(--container-bg);
-                                border-radius: 20px;
-                                box-shadow: 0 2px 4px var(--shadow-color);
-                                padding: 30px;
-                                overflow-y: auto;
-                                max-height: 100%;
-                                border: 1px solid var(--border-color);
-                            }
+                    .boton-cancelar {
+                        background-color: #ff3b30;
+                    }
 
-                            .form-group {
-                                margin-bottom: 20px;
-                            }
+                    #IMEI:invalid {
+                        border-color: #ff3b30;
+                    }
 
-                            label {
-                                display: block;
-                                margin-bottom: 8px;
-                                font-weight: 500;
-                                color: var(--text-color);
-                            }
+                    #IMEI:valid {
+                        border-color: #34c759;
+                    }
 
-                            select,
-                            input,
-                            textarea {
-                                width: 100%;
-                                padding: 12px;
-                                margin-bottom: 10px;
-                                background-color: var(--item-bg);
-                                color: var(--text-color);
-                                border: 1px solid var(--border-color);
-                                border-radius: 12px;
-                                font-size: 1em;
-                                transition: all 0.3s ease;
-                            }
+                    small {
+                        font-size: 0.85em;
+                        color: var(--secondary-text);
+                        display: block;
+                        margin-top: 4px;
+                    }
 
-                            select:focus,
-                            input:focus,
-                            textarea:focus {
-                                outline: none;
-                                border-color: var(--button-bg);
-                                box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.2);
-                            }
+                    /* Scrollbar */
+                    ::-webkit-scrollbar {
+                        width: 8px;
+                    }
 
-                            button {
-                                padding: 12px 24px;
-                                background-color: var(--button-bg);
-                                color: white;
-                                border: none;
-                                border-radius: 980px;
-                                cursor: pointer;
-                                margin-right: 10px;
-                                font-size: 1em;
-                                font-weight: 500;
-                                transition: all 0.3s ease;
-                            }
+                    ::-webkit-scrollbar-track {
+                        background: var(--bg-color);
+                        border-radius: 4px;
+                    }
 
-                            button:hover {
-                                transform: scale(1.02);
-                                background-color: var(--hover-color);
-                            }
+                    ::-webkit-scrollbar-thumb {
+                        background: var(--secondary-text);
+                        border-radius: 4px;
+                    }
 
-                            .registro-item {
-                                background-color: var(--item-bg);
-                                padding: 20px;
-                                margin-bottom: 15px;
-                                border-radius: 14px;
-                                border: 1px solid var(--border-color);
-                                transition: all 0.3s ease;
-                            }
+                    ::-webkit-scrollbar-thumb:hover {
+                        background: var(--text-color);
+                    }
 
-                            .registro-item:hover {
-                                transform: scale(1.01);
-                                box-shadow: 0 4px 12px var(--shadow-color);
-                            }
+                    /* Firefox */
+                    * {
+                        scrollbar-width: thin;
+                        scrollbar-color: var(--secondary-text) var(--bg-color);
+                    }
+                    @media (max-width: 768px) {
+                        .contenedor-principal {
+                            flex-direction: column;
+                            gap: 20px;
+                            padding: 10px;
+                            height: auto;
+                            margin: 10px;
+                            max-width: 100%;
+                        }
 
-                            .registro-item p {
-                                margin: 12px 0;
-                                font-size: 0.95em;
-                            }
+                        .registro-lista,
+                        .formulario-container {
+                            min-width: unset;
+                            width: 100%;
+                            max-height: none;
+                            padding: 15px;
+                            margin-bottom: 20px;
+                        }
 
-                            .registro-item strong {
-                                font-weight: 500;
-                            }
+                        .titulo-principal {
+                            font-size: 2em;
+                            padding: 10px;
+                            margin-top: 60px; /* Espacio para el botón de inicio */
+                        }
 
-                            .boton-eliminar {
-                                background-color: #ff3b30;
-                            }
+                        .saludo {
+                            font-size: 1em;
+                            padding: 0 15px;
+                            margin-bottom: 20px;
+                        }
 
-                            .boton-editar {
-                                background-color: #34c759;
-                            }
+                        /* Mejorar la visualización de los formularios */
+                        .form-group {
+                            margin-bottom: 15px;
+                        }
 
-                            .boton-guardar {
-                                background-color: #34c759;
-                            }
+                        select,
+                        input,
+                        textarea {
+                            padding: 15px;
+                            font-size: 16px; /* Previene el zoom automático en iOS */
+                            margin-bottom: 8px;
+                        }
 
-                            .boton-cancelar {
-                                background-color: #ff3b30;
-                            }
+                        /* Mejorar la visualización de los registros */
+                        .registro-item {
+                            padding: 15px;
+                            margin-bottom: 10px;
+                            font-size: 0.9em;
+                        }
 
-                            /* Estilos para móvil */
-                            @media (max-width: 768px) {
-                                .contenedor-principal {
-                                    flex-direction: column;
-                                    gap: 20px;
-                                    padding: 10px;
-                                    height: auto;
-                                    margin: 10px;
-                                    max-width: 100%;
-                                }
+                        .registro-item p {
+                            margin: 8px 0;
+                        }
 
-                                .registro-lista,
+                        /* Mejorar los botones */
+                        button {
+                            width: 100%;
+                            margin: 5px 0;
+                            padding: 15px;
+                            font-size: 1em;
+                        }
+
+                        .botones-edicion {
+                            display: flex;
+                            flex-direction: column;
+                            gap: 10px;
+                        }
+
+                        /* Ajustar el botón de inicio */
+                        .inicio-btn {
+                            position: fixed;
+                            top: 10px;
+                            right: 10px;
+                            z-index: 1000;
+                            padding: 10px 20px;
+                            font-size: 0.9em;
+                        }
+
+                        /* Ajustar el botón de modo oscuro */
+                        .modo-oscuro-btn {
+                            position: fixed;
+                            top: 10px;
+                            left: 10px;
+                            z-index: 1000;
+                            padding: 10px 20px;
+                            font-size: 0.9em;
+                        }
+
+                        .registro-lista,
                                 .formulario-container {
-                                    min-width: unset;
-                                    width: 100%;
-                                    max-height: none;
-                                    padding: 15px;
-                                    margin-bottom: 20px;
-                                }
-
-                                .titulo-principal {
-                                    font-size: 2em;
-                                    padding: 10px;
-                                    margin-top: 60px;
-                                }
-
-                                .saludo {
-                                    font-size: 1em;
-                                    padding: 0 15px;
-                                    margin-bottom: 20px;
+                                    flex: 1;
+                                    min-width: 700px;
+                                    background-color: var(--container-bg);
+                                    border-radius: 20px;
+                                    box-shadow: 0 2px 4px var(--shadow-color);
+                                    padding: 30px;
+                                    overflow-y: auto;
+                                    max-height: 100%;
+                                    border: 1px solid var(--border-color);
                                 }
 
                                 .form-group {
-                                    margin-bottom: 15px;
+                                    margin-bottom: 20px;
+                                }
+
+                                label {
+                                    display: block;
+                                    margin-bottom: 8px;
+                                    font-weight: 500;
+                                    color: var(--text-color);
                                 }
 
                                 select,
                                 input,
                                 textarea {
-                                    padding: 15px;
-                                    font-size: 16px;
-                                    margin-bottom: 8px;
-                                }
-
-                                .registro-item {
-                                    padding: 15px;
+                                    width: 100%;
+                                    padding: 12px;
                                     margin-bottom: 10px;
-                                    font-size: 0.9em;
+                                    background-color: var(--item-bg);
+                                    color: var(--text-color);
+                                    border: 1px solid var(--border-color);
+                                    border-radius: 12px;
+                                    font-size: 1em;
+                                    transition: all 0.3s ease;
                                 }
 
-                                .registro-item p {
-                                    margin: 8px 0;
+                                select:focus,
+                                input:focus,
+                                textarea:focus {
+                                    outline: none;
+                                    border-color: var(--button-bg);
+                                    box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.2);
                                 }
 
                                 button {
-                                    width: 100%;
-                                    margin: 5px 0;
-                                    padding: 15px;
+                                    padding: 12px 24px;
+                                    background-color: var(--button-bg);
+                                    color: white;
+                                    border: none;
+                                    border-radius: 980px;
+                                    cursor: pointer;
+                                    margin-right: 10px;
                                     font-size: 1em;
+                                    font-weight: 500;
+                                    transition: all 0.3s ease;
                                 }
 
-                                .botones-edicion {
-                                    display: flex;
-                                    flex-direction: column;
-                                    gap: 10px;
+                                button:hover {
+                                    transform: scale(1.02);
+                                    background-color: var(--hover-color);
                                 }
 
-                                .registro-lista {
-                                    -webkit-overflow-scrolling: touch;
-                                    max-height: 50vh;
+                                .registro-item {
+                                    background-color: var(--item-bg);
+                                    padding: 20px;
+                                    margin-bottom: 15px;
+                                    border-radius: 14px;
+                                    border: 1px solid var(--border-color);
+                                    transition: all 0.3s ease;
                                 }
 
-                                body {
-                                    padding-bottom: 70px;
+                                .registro-item:hover {
+                                    transform: scale(1.01);
+                                    box-shadow: 0 4px 12px var(--shadow-color);
                                 }
 
-                                .registro-item.editando {
-                                    padding: 10px;
+                                .registro-item p {
+                                    margin: 12px 0;
+                                    font-size: 0.95em;
                                 }
 
-                                .registro-item.editando .form-group {
-                                    margin-bottom: 10px;
+                                .registro-item strong {
+                                    font-weight: 500;
                                 }
 
-                                label {
-                                    font-size: 0.9em;
+                                .boton-eliminar {
+                                    background-color: #ff3b30;
                                 }
 
-                                small {
-                                    font-size: 0.8em;
+                                .boton-editar {
+                                    background-color: #34c759;
                                 }
-                            }
 
-                            /* Scrollbar personalizado */
-                            ::-webkit-scrollbar {
-                                width: 8px;
-                            }
+                                .boton-guardar {
+                                    background-color: #34c759;
+                                }
 
-                            ::-webkit-scrollbar-track {
-                                background: var(--bg-color);
-                                border-radius: 4px;
-                            }
+                                .boton-cancelar {
+                                    background-color: #ff3b30;
+                                }
 
-                            ::-webkit-scrollbar-thumb {
-                                background: var(--secondary-text);
-                                border-radius: 4px;
-                            }
+                                /* Estilos para móvil */
+                                @media (max-width: 768px) {
+                                    .contenedor-principal {
+                                        flex-direction: column;
+                                        gap: 20px;
+                                        padding: 10px;
+                                        height: auto;
+                                        margin: 10px;
+                                        max-width: 100%;
+                                    }
 
-                            ::-webkit-scrollbar-thumb:hover {
-                                background: var(--text-color);
-                            }
+                                    .registro-lista,
+                                    .formulario-container {
+                                        min-width: unset;
+                                        width: 100%;
+                                        max-height: none;
+                                        padding: 15px;
+                                        margin-bottom: 20px;
+                                    }
 
-                            * {
-                                scrollbar-width: thin;
-                                scrollbar-color: var(--secondary-text) var(--bg-color);
-                            }
+                                    .titulo-principal {
+                                        font-size: 2em;
+                                        padding: 10px;
+                                        margin-top: 60px;
+                                    }
+
+                                    .saludo {
+                                        font-size: 1em;
+                                        padding: 0 15px;
+                                        margin-bottom: 20px;
+                                    }
+
+                                    .form-group {
+                                        margin-bottom: 15px;
+                                    }
+
+                                    select,
+                                    input,
+                                    textarea {
+                                        padding: 15px;
+                                        font-size: 16px;
+                                        margin-bottom: 8px;
+                                    }
+
+                                    .registro-item {
+                                        padding: 15px;
+                                        margin-bottom: 10px;
+                                        font-size: 0.9em;
+                                    }
+
+                                    .registro-item p {
+                                        margin: 8px 0;
+                                    }
+
+                                    button {
+                                        width: 100%;
+                                        margin: 5px 0;
+                                        padding: 15px;
+                                        font-size: 1em;
+                                    }
+
+                                    .botones-edicion {
+                                        display: flex;
+                                        flex-direction: column;
+                                        gap: 10px;
+                                    }
+
+                                    .registro-lista {
+                                        -webkit-overflow-scrolling: touch;
+                                        max-height: 50vh;
+                                    }
+
+                                    body {
+                                        padding-bottom: 70px;
+                                    }
+
+                                    .registro-item.editando {
+                                        padding: 10px;
+                                    }
+
+                                    .registro-item.editando .form-group {
+                                        margin-bottom: 10px;
+                                    }
+
+                                    label {
+                                        font-size: 0.9em;
+                                    }
+
+                                    small {
+                                        font-size: 0.8em;
+                                    }
+                                }
+
+                                /* Scrollbar personalizado */
+                                ::-webkit-scrollbar {
+                                    width: 8px;
+                                }
+
+                                ::-webkit-scrollbar-track {
+                                    background: var(--bg-color);
+                                    border-radius: 4px;
+                                }
+
+                                ::-webkit-scrollbar-thumb {
+                                    background: var(--secondary-text);
+                                    border-radius: 4px;
+                                }
+
+                                ::-webkit-scrollbar-thumb:hover {
+                                    background: var(--text-color);
+                                }
+
+                                * {
+                                    scrollbar-width: thin;
+                                    scrollbar-color: var(--secondary-text) var(--bg-color);
+                                }
         </style>
     </head>
 
