@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="es" data-theme="light">
+<html lang="es" data-theme="dark">
     <head>
         <meta charset="UTF-8" />
         <title>Procesamiento de iPhones</title>
@@ -34,20 +34,12 @@
                 margin: 0;
                 padding: 0;
                 box-sizing: border-box;
-                font-family:
-                    "SF Pro Display",
-                    -apple-system,
-                    BlinkMacSystemFont,
-                    sans-serif;
+                font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, sans-serif;
                 -webkit-font-smoothing: antialiased;
             }
 
             body {
-                font-family:
-                    "SF Pro Display",
-                    -apple-system,
-                    BlinkMacSystemFont,
-                    sans-serif;
+                font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, sans-serif;
                 padding: 20px;
                 margin: 0;
                 background-color: var(--bg-color);
@@ -114,173 +106,6 @@
                 font-weight: 400;
             }
 
-            .registro-lista,
-            .formulario-container {
-                flex: 1;
-                min-width: 700px;
-                background-color: var(--container-bg);
-                border-radius: 20px;
-                box-shadow: 0 2px 4px var(--shadow-color);
-                padding: 30px;
-                overflow-y: auto;
-                max-height: 100%;
-                border: 1px solid var(--border-color);
-            }
-
-            .form-group {
-                margin-bottom: 20px;
-            }
-
-            label {
-                display: block;
-                margin-bottom: 8px;
-                font-weight: 500;
-                color: var(--text-color);
-            }
-
-            select,
-            input,
-            textarea {
-                width: 100%;
-                padding: 12px;
-                margin-bottom: 10px;
-                background-color: var(--item-bg);
-                color: var(--text-color);
-                border: 1px solid var(--border-color);
-                border-radius: 12px;
-                font-size: 1em;
-                transition: all 0.3s ease;
-            }
-
-            select:focus,
-            input:focus,
-            textarea:focus {
-                outline: none;
-                border-color: var(--button-bg);
-                box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.2);
-            }
-
-            button {
-                padding: 12px 24px;
-                background-color: var(--button-bg);
-                color: white;
-                border: none;
-                border-radius: 980px;
-                cursor: pointer;
-                margin-right: 10px;
-                font-size: 1em;
-                font-weight: 500;
-                transition: all 0.3s ease;
-            }
-
-            button:hover {
-                transform: scale(1.02);
-                background-color: var(--hover-color);
-            }
-
-            .registro-item {
-                background-color: var(--item-bg);
-                padding: 20px;
-                margin-bottom: 15px;
-                border-radius: 14px;
-                border: 1px solid var(--border-color);
-                transition: all 0.3s ease;
-            }
-
-            .registro-item:hover {
-                transform: scale(1.01);
-                box-shadow: 0 4px 12px var(--shadow-color);
-            }
-
-            .registro-item p {
-                margin: 12px 0;
-                font-size: 0.95em;
-            }
-
-            .registro-item strong {
-                font-weight: 500;
-            }
-
-            .boton-eliminar {
-                background-color: #ff3b30;
-            }
-
-            .boton-editar {
-                background-color: #34c759;
-            }
-
-            .boton-guardar {
-                background-color: #34c759;
-            }
-
-            .boton-cancelar {
-                background-color: #ff3b30;
-            }
-
-            #IMEI:invalid {
-                border-color: #ff3b30;
-            }
-
-            #IMEI:valid {
-                border-color: #34c759;
-            }
-
-            small {
-                font-size: 0.85em;
-                color: var(--secondary-text);
-                display: block;
-                margin-top: 4px;
-            }
-
-            /* Scrollbar */
-            ::-webkit-scrollbar {
-                width: 8px;
-            }
-
-            ::-webkit-scrollbar-track {
-                background: var(--bg-color);
-                border-radius: 4px;
-            }
-
-            ::-webkit-scrollbar-thumb {
-                background: var(--secondary-text);
-                border-radius: 4px;
-            }
-
-            ::-webkit-scrollbar-thumb:hover {
-                background: var(--text-color);
-            }
-
-            /* Firefox */
-            * {
-                scrollbar-width: thin;
-                scrollbar-color: var(--secondary-text) var(--bg-color);
-            }
-
-            @media (max-width: 1400px) {
-                .contenedor-principal {
-                    max-width: 95%;
-                }
-            }
-
-            @media (max-width: 768px) {
-                .contenedor-principal {
-                    flex-direction: column;
-                    height: auto;
-                    margin-bottom: 20px;
-                }
-
-                .registro-lista,
-                .formulario-container {
-                    min-width: unset;
-                    max-height: 70vh;
-                }
-
-                .titulo-principal {
-                    font-size: 2.5em;
-                }
-            }
-
             .inicio-btn {
                 position: absolute;
                 top: 10px;
@@ -294,6 +119,7 @@
                 font-size: 1em;
                 font-weight: 500;
                 transition: all 0.3s ease;
+                text-decoration: none;
             }
 
             .inicio-btn:hover {
@@ -301,208 +127,468 @@
                 background-color: var(--hover-color);
             }
 
-            @media (max-width: 768px) {
-                .contenedor-principal {
-                    flex-direction: column;
-                    gap: 20px;
-                    padding: 10px;
-                    height: auto;
-                    margin: 10px;
-                    max-width: 100%;
-                }
-
                 .registro-lista,
                 .formulario-container {
-                    min-width: unset;
-                    width: 100%;
-                    max-height: none;
-                    padding: 15px;
-                    margin-bottom: 20px;
+                    flex: 1;
+                    min-width: 700px;
+                    background-color: var(--container-bg);
+                    border-radius: 20px;
+                    box-shadow: 0 2px 4px var(--shadow-color);
+                    padding: 30px;
+                    overflow-y: auto;
+                    max-height: 100%;
+                    border: 1px solid var(--border-color);
                 }
 
-                .titulo-principal {
-                    font-size: 2em;
-                    padding: 10px;
-                    margin-top: 60px; /* Espacio para el botón de inicio */
-                }
-
-                .saludo {
-                    font-size: 1em;
-                    padding: 0 15px;
-                    margin-bottom: 20px;
-                }
-
-                /* Mejorar la visualización de los formularios */
                 .form-group {
-                    margin-bottom: 15px;
+                    margin-bottom: 20px;
+                }
+
+                label {
+                    display: block;
+                    margin-bottom: 8px;
+                    font-weight: 500;
+                    color: var(--text-color);
                 }
 
                 select,
                 input,
                 textarea {
-                    padding: 15px;
-                    font-size: 16px; /* Previene el zoom automático en iOS */
-                    margin-bottom: 8px;
+                    width: 100%;
+                    padding: 12px;
+                    margin-bottom: 10px;
+                    background-color: var(--item-bg);
+                    color: var(--text-color);
+                    border: 1px solid var(--border-color);
+                    border-radius: 12px;
+                    font-size: 1em;
+                    transition: all 0.3s ease;
                 }
 
-                /* Mejorar la visualización de los registros */
+                select:focus,
+                input:focus,
+                textarea:focus {
+                    outline: none;
+                    border-color: var(--button-bg);
+                    box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.2);
+                }
+
+                button {
+                    padding: 12px 24px;
+                    background-color: var(--button-bg);
+                    color: white;
+                    border: none;
+                    border-radius: 980px;
+                    cursor: pointer;
+                    margin-right: 10px;
+                    font-size: 1em;
+                    font-weight: 500;
+                    transition: all 0.3s ease;
+                }
+
+                button:hover {
+                    transform: scale(1.02);
+                    background-color: var(--hover-color);
+                }
+
                 .registro-item {
-                    padding: 15px;
-                    margin-bottom: 10px;
-                    font-size: 0.9em;
+                    background-color: var(--item-bg);
+                    padding: 20px;
+                    margin-bottom: 15px;
+                    border-radius: 14px;
+                    border: 1px solid var(--border-color);
+                    transition: all 0.3s ease;
+                }
+
+                .registro-item:hover {
+                    transform: scale(1.01);
+                    box-shadow: 0 4px 12px var(--shadow-color);
                 }
 
                 .registro-item p {
-                    margin: 8px 0;
+                    margin: 12px 0;
+                    font-size: 0.95em;
                 }
 
-                /* Mejorar los botones */
-                button {
-                    width: 100%;
-                    margin: 5px 0;
-                    padding: 15px;
-                    font-size: 1em;
+                .registro-item strong {
+                    font-weight: 500;
                 }
 
-                .botones-edicion {
-                    display: flex;
-                    flex-direction: column;
-                    gap: 10px;
+                .boton-eliminar {
+                    background-color: #ff3b30;
                 }
 
-                /* Ajustar el botón de inicio */
-                .inicio-btn {
-                    position: fixed;
-                    top: 10px;
-                    right: 10px;
-                    z-index: 1000;
-                    padding: 10px 20px;
-                    font-size: 0.9em;
+                .boton-editar {
+                    background-color: #34c759;
                 }
 
-                /* Ajustar el botón de modo oscuro */
-                .modo-oscuro-btn {
-                    position: fixed;
-                    top: 10px;
-                    left: 10px;
-                    z-index: 1000;
-                    padding: 10px 20px;
-                    font-size: 0.9em;
+                .boton-guardar {
+                    background-color: #34c759;
                 }
 
-                /* Mejorar el scroll */
-                .registro-lista {
-                    -webkit-overflow-scrolling: touch; /* Scroll suave en iOS */
-                    max-height: 50vh;
+                .boton-cancelar {
+                    background-color: #ff3b30;
                 }
 
-                /* Añadir espacio al final para evitar que el contenido se oculte detrás de los botones fijos */
-                body {
-                    padding-bottom: 70px;
-                }
-
-                /* Mejorar la visualización de los elementos editables */
-                .registro-item.editando {
-                    padding: 10px;
-                }
-
-                .registro-item.editando .form-group {
-                    margin-bottom: 10px;
-                }
-
-                /* Ajustar el tamaño de los textos */
-                label {
-                    font-size: 0.9em;
-                }
-
-                small {
-                    font-size: 0.8em;
-                }
-
-                /* Mejorar la visualización de mensajes de error */
                 #IMEI:invalid {
                     border-color: #ff3b30;
                 }
 
-                /* Agregar feedback táctil */
-                button:active,
-                select:active,
-                input:active {
-                    transform: scale(0.98);
+                #IMEI:valid {
+                    border-color: #34c759;
                 }
-            }
 
-            /* Mejoras generales para la accesibilidad */
-            :focus {
-                outline: 2px solid var(--button-bg);
-                outline-offset: 2px;
-            }
-
-            /* Animaciones más suaves */
-            @keyframes fadeIn {
-                from {
-                    opacity: 0;
+                small {
+                    font-size: 0.85em;
+                    color: var(--secondary-text);
+                    display: block;
+                    margin-top: 4px;
                 }
-                to {
-                    opacity: 1;
+
+                /* Scrollbar */
+                ::-webkit-scrollbar {
+                    width: 8px;
                 }
-            }
 
-            .registro-item {
-                animation: fadeIn 0.3s ease-in-out;
-            }
+                ::-webkit-scrollbar-track {
+                    background: var(--bg-color);
+                    border-radius: 4px;
+                }
 
-            /* Mejorar la legibilidad en modo oscuro */
-            :root[data-theme="dark"] .descripcion {
-                background-color: rgba(255, 255, 255, 0.1);
-                color: #e0e0e0;
-            }
+                ::-webkit-scrollbar-thumb {
+                    background: var(--secondary-text);
+                    border-radius: 4px;
+                }
 
-            /* Mejoras en el contraste */
-            :root[data-theme="dark"] .registro-item {
-                border: 1px solid rgba(255, 255, 255, 0.1);
-            }
+                ::-webkit-scrollbar-thumb:hover {
+                    background: var(--text-color);
+                }
 
-            /* Asegurar que los inputs sean legibles en modo oscuro */
-            :root[data-theme="dark"] input,
-            :root[data-theme="dark"] select,
-            :root[data-theme="dark"] textarea {
-                background-color: rgba(255, 255, 255, 0.1);
-                color: #ffffff;
-            }
+                /* Firefox */
+                * {
+                    scrollbar-width: thin;
+                    scrollbar-color: var(--secondary-text) var(--bg-color);
+                }
+                @media (max-width: 768px) {
+                    .contenedor-principal {
+                        flex-direction: column;
+                        gap: 20px;
+                        padding: 10px;
+                        height: auto;
+                        margin: 10px;
+                        max-width: 100%;
+                    }
 
-            /* Mejorar la visualización de placeholders */
-            :root[data-theme="dark"] input::placeholder,
-            :root[data-theme="dark"] textarea::placeholder {
-                color: rgba(255, 255, 255, 0.5);
-            }
+                    .registro-lista,
+                    .formulario-container {
+                        min-width: unset;
+                        width: 100%;
+                        max-height: none;
+                        padding: 15px;
+                        margin-bottom: 20px;
+                    }
 
-            /* Indicadores de estado más claros */
-            .boton-guardar:disabled,
-            .boton-cancelar:disabled {
-                opacity: 0.5;
-                cursor: not-allowed;
-            }
+                    .titulo-principal {
+                        font-size: 2em;
+                        padding: 10px;
+                        margin-top: 60px; /* Espacio para el botón de inicio */
+                    }
 
-            /* Transiciones más suaves */
-            .registro-item,
-            button,
-            input,
-            select,
-            textarea {
-                transition: all 0.2s ease-in-out;
-            }
+                    .saludo {
+                        font-size: 1em;
+                        padding: 0 15px;
+                        margin-bottom: 20px;
+                    }
+
+                    /* Mejorar la visualización de los formularios */
+                    .form-group {
+                        margin-bottom: 15px;
+                    }
+
+                    select,
+                    input,
+                    textarea {
+                        padding: 15px;
+                        font-size: 16px; /* Previene el zoom automático en iOS */
+                        margin-bottom: 8px;
+                    }
+
+                    /* Mejorar la visualización de los registros */
+                    .registro-item {
+                        padding: 15px;
+                        margin-bottom: 10px;
+                        font-size: 0.9em;
+                    }
+
+                    .registro-item p {
+                        margin: 8px 0;
+                    }
+
+                    /* Mejorar los botones */
+                    button {
+                        width: 100%;
+                        margin: 5px 0;
+                        padding: 15px;
+                        font-size: 1em;
+                    }
+
+                    .botones-edicion {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 10px;
+                    }
+
+                    /* Ajustar el botón de inicio */
+                    .inicio-btn {
+                        position: fixed;
+                        top: 10px;
+                        right: 10px;
+                        z-index: 1000;
+                        padding: 10px 20px;
+                        font-size: 0.9em;
+                    }
+
+                    /* Ajustar el botón de modo oscuro */
+                    .modo-oscuro-btn {
+                        position: fixed;
+                        top: 10px;
+                        left: 10px;
+                        z-index: 1000;
+                        padding: 10px 20px;
+                        font-size: 0.9em;
+                    }
+
+                    .registro-lista,
+                            .formulario-container {
+                                flex: 1;
+                                min-width: 700px;
+                                background-color: var(--container-bg);
+                                border-radius: 20px;
+                                box-shadow: 0 2px 4px var(--shadow-color);
+                                padding: 30px;
+                                overflow-y: auto;
+                                max-height: 100%;
+                                border: 1px solid var(--border-color);
+                            }
+
+                            .form-group {
+                                margin-bottom: 20px;
+                            }
+
+                            label {
+                                display: block;
+                                margin-bottom: 8px;
+                                font-weight: 500;
+                                color: var(--text-color);
+                            }
+
+                            select,
+                            input,
+                            textarea {
+                                width: 100%;
+                                padding: 12px;
+                                margin-bottom: 10px;
+                                background-color: var(--item-bg);
+                                color: var(--text-color);
+                                border: 1px solid var(--border-color);
+                                border-radius: 12px;
+                                font-size: 1em;
+                                transition: all 0.3s ease;
+                            }
+
+                            select:focus,
+                            input:focus,
+                            textarea:focus {
+                                outline: none;
+                                border-color: var(--button-bg);
+                                box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.2);
+                            }
+
+                            button {
+                                padding: 12px 24px;
+                                background-color: var(--button-bg);
+                                color: white;
+                                border: none;
+                                border-radius: 980px;
+                                cursor: pointer;
+                                margin-right: 10px;
+                                font-size: 1em;
+                                font-weight: 500;
+                                transition: all 0.3s ease;
+                            }
+
+                            button:hover {
+                                transform: scale(1.02);
+                                background-color: var(--hover-color);
+                            }
+
+                            .registro-item {
+                                background-color: var(--item-bg);
+                                padding: 20px;
+                                margin-bottom: 15px;
+                                border-radius: 14px;
+                                border: 1px solid var(--border-color);
+                                transition: all 0.3s ease;
+                            }
+
+                            .registro-item:hover {
+                                transform: scale(1.01);
+                                box-shadow: 0 4px 12px var(--shadow-color);
+                            }
+
+                            .registro-item p {
+                                margin: 12px 0;
+                                font-size: 0.95em;
+                            }
+
+                            .registro-item strong {
+                                font-weight: 500;
+                            }
+
+                            .boton-eliminar {
+                                background-color: #ff3b30;
+                            }
+
+                            .boton-editar {
+                                background-color: #34c759;
+                            }
+
+                            .boton-guardar {
+                                background-color: #34c759;
+                            }
+
+                            .boton-cancelar {
+                                background-color: #ff3b30;
+                            }
+
+                            /* Estilos para móvil */
+                            @media (max-width: 768px) {
+                                .contenedor-principal {
+                                    flex-direction: column;
+                                    gap: 20px;
+                                    padding: 10px;
+                                    height: auto;
+                                    margin: 10px;
+                                    max-width: 100%;
+                                }
+
+                                .registro-lista,
+                                .formulario-container {
+                                    min-width: unset;
+                                    width: 100%;
+                                    max-height: none;
+                                    padding: 15px;
+                                    margin-bottom: 20px;
+                                }
+
+                                .titulo-principal {
+                                    font-size: 2em;
+                                    padding: 10px;
+                                    margin-top: 60px;
+                                }
+
+                                .saludo {
+                                    font-size: 1em;
+                                    padding: 0 15px;
+                                    margin-bottom: 20px;
+                                }
+
+                                .form-group {
+                                    margin-bottom: 15px;
+                                }
+
+                                select,
+                                input,
+                                textarea {
+                                    padding: 15px;
+                                    font-size: 16px;
+                                    margin-bottom: 8px;
+                                }
+
+                                .registro-item {
+                                    padding: 15px;
+                                    margin-bottom: 10px;
+                                    font-size: 0.9em;
+                                }
+
+                                .registro-item p {
+                                    margin: 8px 0;
+                                }
+
+                                button {
+                                    width: 100%;
+                                    margin: 5px 0;
+                                    padding: 15px;
+                                    font-size: 1em;
+                                }
+
+                                .botones-edicion {
+                                    display: flex;
+                                    flex-direction: column;
+                                    gap: 10px;
+                                }
+
+                                .registro-lista {
+                                    -webkit-overflow-scrolling: touch;
+                                    max-height: 50vh;
+                                }
+
+                                body {
+                                    padding-bottom: 70px;
+                                }
+
+                                .registro-item.editando {
+                                    padding: 10px;
+                                }
+
+                                .registro-item.editando .form-group {
+                                    margin-bottom: 10px;
+                                }
+
+                                label {
+                                    font-size: 0.9em;
+                                }
+
+                                small {
+                                    font-size: 0.8em;
+                                }
+                            }
+
+                            /* Scrollbar personalizado */
+                            ::-webkit-scrollbar {
+                                width: 8px;
+                            }
+
+                            ::-webkit-scrollbar-track {
+                                background: var(--bg-color);
+                                border-radius: 4px;
+                            }
+
+                            ::-webkit-scrollbar-thumb {
+                                background: var(--secondary-text);
+                                border-radius: 4px;
+                            }
+
+                            ::-webkit-scrollbar-thumb:hover {
+                                background: var(--text-color);
+                            }
+
+                            * {
+                                scrollbar-width: thin;
+                                scrollbar-color: var(--secondary-text) var(--bg-color);
+                            }
         </style>
     </head>
 
     <body>
         <button class="modo-oscuro-btn" onclick="ToggleModoOscuro()">
-            <span id="modo-oscuro-texto">🌙 Modo Oscuro</span>
+            <span id="modo-oscuro-texto">☀️ Modo Claro</span>
         </button>
 
-        <button class="inicio-btn" onclick="window.location.href='index.html'">
-            🏠 Ir a Inicio
-        </button>
+        <a href="index.html" class="inicio-btn">
+            <i class="fi fi-sr-home"></i> Ir a Inicio
+        </a>
+
         <div class="titulo-principal">
             Ingreso de celulares, <span class="letra-r">R</span
             ><span class="letra-t">T</span>
