@@ -1,0 +1,202 @@
+@import url("https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@400;500;600;700&display=swap");
+
+:root[data-theme="light"] {
+    --bg-color: #f5f5f7;
+    --text-color: #1d1d1f;
+    --container-bg: #ffffff;
+    --item-bg: #ffffff;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --border-color: #d1d1d6;
+    --hover-color: #0077ed;
+    --secondary-text: #6e6e73;
+    --button-bg: #0071e3;
+}
+
+:root[data-theme="dark"] {
+    --bg-color: #000000;
+    --text-color: #f5f5f7;
+    --container-bg: #1d1d1f;
+    --item-bg: #1d1d1f;
+    --shadow-color: rgba(0, 0, 0, 0.3);
+    --border-color: #424245;
+    --hover-color: #2997ff;
+    --secondary-text: #86868b;
+    --button-bg: #0077ed;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family:
+        "SF Pro Display",
+        -apple-system,
+        BlinkMacSystemFont,
+        sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+
+body {
+    font-family:
+        "SF Pro Display",
+        -apple-system,
+        BlinkMacSystemFont,
+        sans-serif;
+    margin: 0;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition: all 0.3s ease;
+    line-height: 1.47059;
+    letter-spacing: -0.022em;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.top-bar {
+    background-color: var(--container-bg);
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 4px var(--shadow-color);
+}
+
+.top-bar h1 {
+    font-size: 1.5em;
+    font-weight: 600;
+}
+
+.toggle-btn,
+.theme-toggle {
+    padding: 12px 24px;
+    background-color: var(--button-bg);
+    color: white;
+    border: none;
+    border-radius: 980px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.toggle-btn:hover,
+.theme-toggle:hover {
+    transform: scale(1.02);
+    background-color: var(--hover-color);
+}
+
+.sidebar {
+    position: fixed;
+    left: -250px;
+    top: 0;
+    width: 250px;
+    height: 100%;
+    background-color: var(--container-bg);
+    transition: all 0.3s ease;
+    box-shadow: 2px 0 4px var(--shadow-color);
+    z-index: 1000;
+}
+
+.sidebar.open {
+    left: 0;
+}
+
+.sidebar-content {
+    padding: 20px;
+}
+
+.sidebar-content a {
+    display: block;
+    padding: 10px 0;
+    color: var(--text-color);
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.sidebar-content a:hover {
+    color: var(--hover-color);
+}
+
+.main-content {
+    padding: 20px;
+    margin-left: 0;
+    transition: all 0.3s ease;
+}
+
+.main-content.sidebar-open {
+    margin-left: 250px;
+}
+
+.close-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background-color: transparent;
+    border: none;
+    font-size: 1.5em;
+    cursor: pointer;
+    color: var(--text-color);
+    transition: color 0.3s ease;
+}
+
+.close-btn:hover {
+    color: var(--hover-color);
+}
+
+.registro-container {
+    position: fixed;
+    bottom: 50px;
+    right: 50px;
+    text-align: center;
+}
+
+.btn-registro {
+    background-color: var(--button-bg);
+    color: white;
+    padding: 15px 30px;
+    border: none;
+    border-radius: 25px;
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px var(--shadow-color);
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+    margin-bottom: 15px;
+}
+
+.btn-registro:hover {
+    transform: scale(1.02);
+    background-color: var(--hover-color);
+}
+
+.descripcion {
+    max-width: 300px;
+    color: var(--secondary-text);
+    font-size: 14px;
+    line-height: 1.5;
+    background-color: var(--container-bg);
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px var(--shadow-color);
+    border: 1px solid var(--border-color);
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        width: 100%;
+        left: -100%;
+    }
+
+    .main-content.sidebar-open {
+        margin-left: 0;
+    }
+
+    .registro-container {
+        bottom: 20px;
+        right: 20px;
+        left: 20px;
+        width: auto;
+    }
+}

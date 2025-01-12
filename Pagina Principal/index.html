@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="es" data-theme="light">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Rosario Tecno Herramientas</title>
+        <link rel="stylesheet" href="styles.css" />
+        <link
+            rel="icon"
+            href="https://cdn-uicons.flaticon.com/2.1.0/uicons-solid-rounded/svg/fi-sr-home.svg"
+            type="image/svg+xml"
+        />
+        <link
+            rel="stylesheet"
+            href="https://cdn-uicons.flaticon.com/2.1.0/uicons-solid-rounded/css/uicons-solid-rounded.css"
+        />
+    </head>
+
+    <body>
+        <div class="top-bar">
+            <button class="toggle-btn" onclick="toggleSidebar()">☰</button>
+            <h1>Rosario Tecno Herramientas</h1>
+            <button class="theme-toggle" onclick="toggleTheme()">🌓</button>
+        </div>
+
+        <div class="sidebar" id="sidebar">
+            <button class="close-btn" onclick="toggleSidebar()">✖</button>
+            <div class="sidebar-content">
+                <a href="index.html">Inicio</a>
+                <!-- Removed the Registro de Celulares link from here -->
+                <a href="#">Herramienta 2</a>
+                <a href="#">Herramienta 3</a>
+            </div>
+        </div>
+
+        <div class="registro-container">
+            <a href="CelusUsados.html" class="btn-registro"
+                >📱 Registrar Celular</a
+            >
+            <div class="descripcion">
+                Esta es la herramienta para registrar celulares usados! <br />
+            </div>
+        </div>
+
+        <script src="scripts.js"></script>
+    </body>
+</html>

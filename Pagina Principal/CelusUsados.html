@@ -1,0 +1,962 @@
+<!doctype html>
+<html lang="es" data-theme="light">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Procesamiento de iPhones</title>
+        <style>
+            @import url("https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@400;500;600;700&display=swap");
+
+            :root[data-theme="light"] {
+                --bg-color: #f5f5f7;
+                --text-color: #1d1d1f;
+                --container-bg: #ffffff;
+                --item-bg: #ffffff;
+                --shadow-color: rgba(0, 0, 0, 0.1);
+                --border-color: #d1d1d6;
+                --hover-color: #0077ed;
+                --secondary-text: #6e6e73;
+                --button-bg: #0071e3;
+            }
+
+            :root[data-theme="dark"] {
+                --bg-color: #000000;
+                --text-color: #f5f5f7;
+                --container-bg: #1d1d1f;
+                --item-bg: #1d1d1f;
+                --shadow-color: rgba(0, 0, 0, 0.3);
+                --border-color: #424245;
+                --hover-color: #2997ff;
+                --secondary-text: #86868b;
+                --button-bg: #0077ed;
+            }
+
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+                font-family:
+                    "SF Pro Display",
+                    -apple-system,
+                    BlinkMacSystemFont,
+                    sans-serif;
+                -webkit-font-smoothing: antialiased;
+            }
+
+            body {
+                font-family:
+                    "SF Pro Display",
+                    -apple-system,
+                    BlinkMacSystemFont,
+                    sans-serif;
+                padding: 20px;
+                margin: 0;
+                background-color: var(--bg-color);
+                color: var(--text-color);
+                transition: all 0.3s ease;
+                line-height: 1.47059;
+                letter-spacing: -0.022em;
+                min-height: 100vh;
+                display: flex;
+                flex-direction: column;
+                overflow: hidden;
+            }
+
+            .modo-oscuro-btn {
+                position: absolute;
+                top: 10px;
+                left: 10px;
+                padding: 12px 24px;
+                background-color: var(--button-bg);
+                color: white;
+                border: none;
+                border-radius: 980px;
+                cursor: pointer;
+                font-size: 1em;
+                font-weight: 500;
+                transition: all 0.3s ease;
+            }
+
+            .modo-oscuro-btn:hover {
+                transform: scale(1.02);
+                background-color: var(--hover-color);
+            }
+
+            .contenedor-principal {
+                display: flex;
+                gap: 30px;
+                max-width: 90%;
+                margin: 20px auto 40px auto;
+                padding: 0 20px;
+                height: calc(100vh - 250px);
+            }
+
+            .titulo-principal {
+                text-align: center;
+                font-size: 3.5em;
+                margin-bottom: 10px;
+                font-weight: 600;
+                letter-spacing: -0.003em;
+            }
+
+            .letra-r {
+                color: #ffd700;
+            }
+
+            .letra-t {
+                color: #800080;
+            }
+
+            .saludo {
+                text-align: center;
+                font-size: 1.2em;
+                margin-bottom: 30px;
+                color: var(--secondary-text);
+                font-weight: 400;
+            }
+
+            .registro-lista,
+            .formulario-container {
+                flex: 1;
+                min-width: 700px;
+                background-color: var(--container-bg);
+                border-radius: 20px;
+                box-shadow: 0 2px 4px var(--shadow-color);
+                padding: 30px;
+                overflow-y: auto;
+                max-height: 100%;
+                border: 1px solid var(--border-color);
+            }
+
+            .form-group {
+                margin-bottom: 20px;
+            }
+
+            label {
+                display: block;
+                margin-bottom: 8px;
+                font-weight: 500;
+                color: var(--text-color);
+            }
+
+            select,
+            input,
+            textarea {
+                width: 100%;
+                padding: 12px;
+                margin-bottom: 10px;
+                background-color: var(--item-bg);
+                color: var(--text-color);
+                border: 1px solid var(--border-color);
+                border-radius: 12px;
+                font-size: 1em;
+                transition: all 0.3s ease;
+            }
+
+            select:focus,
+            input:focus,
+            textarea:focus {
+                outline: none;
+                border-color: var(--button-bg);
+                box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.2);
+            }
+
+            button {
+                padding: 12px 24px;
+                background-color: var(--button-bg);
+                color: white;
+                border: none;
+                border-radius: 980px;
+                cursor: pointer;
+                margin-right: 10px;
+                font-size: 1em;
+                font-weight: 500;
+                transition: all 0.3s ease;
+            }
+
+            button:hover {
+                transform: scale(1.02);
+                background-color: var(--hover-color);
+            }
+
+            .registro-item {
+                background-color: var(--item-bg);
+                padding: 20px;
+                margin-bottom: 15px;
+                border-radius: 14px;
+                border: 1px solid var(--border-color);
+                transition: all 0.3s ease;
+            }
+
+            .registro-item:hover {
+                transform: scale(1.01);
+                box-shadow: 0 4px 12px var(--shadow-color);
+            }
+
+            .registro-item p {
+                margin: 12px 0;
+                font-size: 0.95em;
+            }
+
+            .registro-item strong {
+                font-weight: 500;
+            }
+
+            .boton-eliminar {
+                background-color: #ff3b30;
+            }
+
+            .boton-editar {
+                background-color: #34c759;
+            }
+
+            .boton-guardar {
+                background-color: #34c759;
+            }
+
+            .boton-cancelar {
+                background-color: #ff3b30;
+            }
+
+            #IMEI:invalid {
+                border-color: #ff3b30;
+            }
+
+            #IMEI:valid {
+                border-color: #34c759;
+            }
+
+            small {
+                font-size: 0.85em;
+                color: var(--secondary-text);
+                display: block;
+                margin-top: 4px;
+            }
+
+            /* Scrollbar */
+            ::-webkit-scrollbar {
+                width: 8px;
+            }
+
+            ::-webkit-scrollbar-track {
+                background: var(--bg-color);
+                border-radius: 4px;
+            }
+
+            ::-webkit-scrollbar-thumb {
+                background: var(--secondary-text);
+                border-radius: 4px;
+            }
+
+            ::-webkit-scrollbar-thumb:hover {
+                background: var(--text-color);
+            }
+
+            /* Firefox */
+            * {
+                scrollbar-width: thin;
+                scrollbar-color: var(--secondary-text) var(--bg-color);
+            }
+
+            @media (max-width: 1400px) {
+                .contenedor-principal {
+                    max-width: 95%;
+                }
+            }
+
+            @media (max-width: 768px) {
+                .contenedor-principal {
+                    flex-direction: column;
+                    height: auto;
+                    margin-bottom: 20px;
+                }
+
+                .registro-lista,
+                .formulario-container {
+                    min-width: unset;
+                    max-height: 70vh;
+                }
+
+                .titulo-principal {
+                    font-size: 2.5em;
+                }
+            }
+
+            .inicio-btn {
+                position: absolute;
+                top: 10px;
+                right: 10px;
+                padding: 12px 24px;
+                background-color: var(--button-bg);
+                color: white;
+                border: none;
+                border-radius: 980px;
+                cursor: pointer;
+                font-size: 1em;
+                font-weight: 500;
+                transition: all 0.3s ease;
+            }
+
+            .inicio-btn:hover {
+                transform: scale(1.02);
+                background-color: var(--hover-color);
+            }
+        </style>
+    </head>
+
+    <body>
+        <button class="modo-oscuro-btn" onclick="ToggleModoOscuro()">
+            <span id="modo-oscuro-texto">🌙 Modo Oscuro</span>
+        </button>
+
+        <button class="inicio-btn" onclick="window.location.href='index.html'">
+            🏠 Ir a Inicio
+        </button>
+        <div class="titulo-principal">
+            Ingreso de celulares, <span class="letra-r">R</span
+            ><span class="letra-t">T</span>
+        </div>
+        <div class="saludo">
+            Herramienta de registro y exportacion en excel de iPhones!!!
+            <br />
+            ehh no se, disfruten - Lean
+        </div>
+
+        <div class="contenedor-principal">
+            <div class="registro-lista" id="ListaRegistros">
+                <h2>Registros Actuales</h2>
+            </div>
+
+            <div class="formulario-container">
+                <h1>Registro de Nuevos iPhones</h1>
+
+                <div class="form-group">
+                    <label for="Modelo">Modelo Base:</label>
+                    <select id="Modelo" onchange="ActualizarVariantes()">
+                        <option value="">Seleccionar Modelo</option>
+                        <option value="iPhone7">iPhone 7</option>
+                        <option value="iPhone8">iPhone 8</option>
+                        <option value="iPhoneX">iPhone X</option>
+                        <option value="iPhone11">iPhone 11</option>
+                        <option value="iPhone12">iPhone 12</option>
+                        <option value="iPhone13">iPhone 13</option>
+                        <option value="iPhone14">iPhone 14</option>
+                        <option value="iPhone15">iPhone 15</option>
+                        <option value="iPhone16">iPhone 16</option>
+                        <option value="iPhoneSE">iPhone SE</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="Variante">Variante:</label>
+                    <select id="Variante">
+                        <option value="Regular">Regular</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="IMEI">IMEI:</label>
+                    <input
+                        type="text"
+                        id="IMEI"
+                        maxlength="15"
+                        minlength="15"
+                        pattern="\d{15}"
+                        onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                        placeholder="15 dígitos numéricos"
+                        title="El IMEI debe contener exactamente 15 dígitos numéricos"
+                    />
+                    <small
+                        >El IMEI debe contener exactamente 15 dígitos
+                        numéricos</small
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="Storage">Capacidad (GB):</label>
+                    <select id="Storage">
+                        <option value="">Seleccionar GB</option>
+                        <option value="64">64 GB</option>
+                        <option value="128">128 GB</option>
+                        <option value="256">256 GB</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="Bateria3u">Batería 3uTools (%):</label>
+                    <input type="number" id="Bateria3u" min="0" max="100" />
+                </div>
+
+                <div class="form-group">
+                    <label for="BateriaDevice">Batería Dispositivo (%):</label>
+                    <input type="number" id="BateriaDevice" min="0" max="100" />
+                </div>
+
+                <div class="form-group">
+                    <label for="Limpieza">¿Necesita limpieza?</label>
+                    <select id="Limpieza">
+                        <option value="No">No</option>
+                        <option value="Si">Sí</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="DirectoVenta">¿Directo para venta?</label>
+                    <select id="DirectoVenta">
+                        <option value="No">No</option>
+                        <option value="Si">Sí</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="Detalles">Detalles adicionales:</label>
+                    <textarea id="Detalles" rows="4"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="Proveedor">Proveedor:</label>
+                    <select id="Proveedor">
+                        <option value="">Seleccionar Proveedor</option>
+                        <option value="FacuF">Facu F</option>
+                        <option value="Gere">Gere</option>
+                        <option value="Gonza">Gonza</option>
+                    </select>
+                </div>
+
+                <button onclick="ProcesarDatos()">Guardar Registro</button>
+                <button onclick="ExportarExcel()">Exportar a Excel</button>
+            </div>
+        </div>
+
+        <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
+        <script>
+            let Registros = [];
+
+            function ToggleModoOscuro() {
+                const html = document.documentElement;
+                const modoOscuroTexto =
+                    document.getElementById("modo-oscuro-texto");
+
+                if (html.getAttribute("data-theme") === "light") {
+                    html.setAttribute("data-theme", "dark");
+                    modoOscuroTexto.innerHTML = "☀️ Modo Claro";
+                } else {
+                    html.setAttribute("data-theme", "light");
+                    modoOscuroTexto.innerHTML = "🌙 Modo Oscuro";
+                }
+            }
+
+            function ActualizarVariantes() {
+                const ModeloSelect = document.getElementById("Modelo");
+                const VarianteSelect = document.getElementById("Variante");
+                const Modelo = ModeloSelect.value;
+
+                VarianteSelect.innerHTML = "";
+
+                let Variantes = ["Regular"];
+
+                switch (Modelo) {
+                    case "iPhone7":
+                    case "iPhone8":
+                        Variantes = ["Regular", "Plus"];
+                        break;
+                    case "iPhoneX":
+                        Variantes = ["Regular", "S", "S Max"];
+                        break;
+                    case "iPhone11":
+                        Variantes = ["Regular", "Pro", "Pro Max"];
+                        break;
+                    case "iPhone12":
+                    case "iPhone13":
+                        Variantes = ["Mini", "Regular", "Pro", "Pro Max"];
+                        break;
+                    case "iPhone14":
+                    case "iPhone15":
+                    case "iPhone16":
+                        Variantes = ["Regular", "Plus", "Pro", "Pro Max"];
+                        break;
+                    case "iPhoneSE":
+                        Variantes = ["2da Gen", "3ra Gen"];
+                        break;
+                }
+
+                Variantes.forEach((variante) => {
+                    const Option = document.createElement("option");
+                    Option.value = variante;
+                    Option.textContent = variante;
+                    VarianteSelect.appendChild(Option);
+                });
+            }
+
+            function ValidarIMEIDuplicado(IMEI, IndexActual = -1) {
+                return Registros.some((registro, index) => {
+                    if (index === parseInt(IndexActual)) {
+                        return false;
+                    }
+                    return registro.IMEI === IMEI;
+                });
+            }
+
+            function ProcesarDatos() {
+                const IMEI = document.getElementById("IMEI").value;
+
+                if (IMEI.length !== 15 || !/^\d{15}$/.test(IMEI)) {
+                    alert(
+                        "Por favor, ingrese un IMEI válido de 15 dígitos numéricos",
+                    );
+                    return;
+                }
+
+                if (ValidarIMEIDuplicado(IMEI)) {
+                    alert(
+                        "Este IMEI ya existe en los registros. No se permiten IMEI duplicados.",
+                    );
+                    return;
+                }
+
+                const Bateria3u = parseFloat(
+                    document.getElementById("Bateria3u").value,
+                );
+                const BateriaDevice = parseFloat(
+                    document.getElementById("BateriaDevice").value,
+                );
+
+                if (Bateria3u > 100 || BateriaDevice > 100) {
+                    alert("El porcentaje de batería no puede ser mayor a 100%");
+                    return;
+                }
+
+                const Registro = {
+                    Modelo: document.getElementById("Modelo").value,
+                    Variante: document.getElementById("Variante").value,
+                    IMEI: IMEI,
+                    Storage: document.getElementById("Storage").value,
+                    Bateria3u: document.getElementById("Bateria3u").value,
+                    BateriaDevice:
+                        document.getElementById("BateriaDevice").value,
+                    Limpieza: document.getElementById("Limpieza").value,
+                    DirectoVenta: document.getElementById("DirectoVenta").value,
+                    Detalles: document.getElementById("Detalles").value,
+                    Proveedor: document.getElementById("Proveedor").value,
+                    Fecha: new Date().toLocaleString(),
+                };
+
+                if (!ValidarDatos(Registro)) {
+                    alert("Por favor, complete todos los campos correctamente");
+                    return;
+                }
+
+                Registros.push(Registro);
+                ActualizarListaRegistros();
+                LimpiarFormulario();
+                alert("Registro guardado exitosamente");
+            }
+
+            function ValidarDatos(Registro) {
+                return (
+                    Registro.Modelo &&
+                    Registro.Storage &&
+                    Registro.Bateria3u &&
+                    Registro.BateriaDevice &&
+                    Registro.Limpieza &&
+                    Registro.Proveedor &&
+                    Registro.IMEI &&
+                    Registro.IMEI.length === 15 &&
+                    /^\d{15}$/.test(Registro.IMEI)
+                );
+            }
+
+            function LimpiarFormulario() {
+                document.getElementById("Modelo").value = "";
+                document.getElementById("Variante").value = "Regular";
+                document.getElementById("IMEI").value = "";
+                document.getElementById("Storage").value = "";
+                document.getElementById("Bateria3u").value = "";
+                document.getElementById("BateriaDevice").value = "";
+                document.getElementById("Limpieza").value = "No";
+                document.getElementById("DirectoVenta").value = "No";
+                document.getElementById("Detalles").value = "";
+                document.getElementById("Proveedor").value = "";
+            }
+
+            function ActualizarListaRegistros() {
+                const Container = document.getElementById("ListaRegistros");
+                let HTML = "<h2>Registros Actuales</h2>";
+
+                Registros.forEach((registro, index) => {
+                    if (registro.editando) {
+                        HTML += `
+                            <div class="registro-item editando">
+                                <div class="form-group">
+                                    <label>Modelo:</label>
+                                    <select id="edit-Modelo-${index}" onchange="ActualizarVariantesEdit(${index})">
+                                        ${generarOpcionesModelo(registro.Modelo)}
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Variante:</label>
+                                    <select id="edit-Variante-${index}">
+                                        ${generarOpcionesVariante(registro.Modelo, registro.Variante)}
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>IMEI:</label>
+                                    <input type="text" id="edit-IMEI-${index}" value="${registro.IMEI}"
+                                           maxlength="15" minlength="15" pattern="\d{15}">
+                                </div>
+                                <div class="form-group">
+                                    <label>Storage:</label>
+                                    <select id="edit-Storage-${index}">
+                                        <option value="64" ${registro.Storage === "64" ? "selected" : ""}>64 GB</option>
+                                        <option value="128" ${registro.Storage === "128" ? "selected" : ""}>128 GB</option>
+                                        <option value="256" ${registro.Storage === "256" ? "selected" : ""}>256 GB</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Batería 3uTools (%):</label>
+                                    <input type="number" id="edit-Bateria3u-${index}"
+                                           value="${registro.Bateria3u}" min="0" max="100">
+                                </div>
+                                <div class="form-group">
+                                    <label>Batería Device (%):</label>
+                                    <input type="number" id="edit-BateriaDevice-${index}"
+                                           value="${registro.BateriaDevice}" min="0" max="100">
+                                </div>
+                                <div class="form-group">
+                                    <label>Limpieza:</label>
+                                    <select id="edit-Limpieza-${index}">
+                                        <option value="No" ${registro.Limpieza === "No" ? "selected" : ""}>No</option>
+                                        <option value="Si" ${registro.Limpieza === "Si" ? "selected" : ""}>Sí</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Directo para venta:</label>
+                                    <select id="edit-DirectoVenta-${index}">
+                                        <option value="No" ${registro.DirectoVenta === "No" ? "selected" : ""}>No</option>
+                                        <option value="Si" ${registro.DirectoVenta === "Si" ? "selected" : ""}>Sí</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Detalles:</label>
+                                    <textarea id="edit-Detalles-${index}">${registro.Detalles}</textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label>Proveedor:</label>
+                                    <select id="edit-Proveedor-${index}">
+                                        ${generarOpcionesProveedor(registro.Proveedor)}
+                                    </select>
+                                </div>
+                                <div class="botones-edicion">
+                                    <button onclick="GuardarCambios(${index})" class="boton-guardar">Guardar Cambios</button>
+                                    <button onclick="CancelarEdicion(${index})" class="boton-cancelar">Cancelar</button>
+                                </div>
+                            </div>
+                        `;
+                    } else {
+                        HTML += `
+                            <div class="registro-item">
+                                <p><strong>Modelo:</strong> ${registro.Modelo} ${registro.Variante}</p>
+                                <p><strong>IMEI:</strong> ${registro.IMEI}</p>
+                                <p><strong>Storage:</strong> ${registro.Storage} GB</p>
+                                <p><strong>Batería 3uTools:</strong> ${registro.Bateria3u}%</p>
+                                <p><strong>Batería Device:</strong> ${registro.BateriaDevice}%</p>
+                                <p><strong>Limpieza:</strong> ${registro.Limpieza}</p>
+                                <p><strong>Directo para venta:</strong> ${registro.DirectoVenta}</p>
+                                <p><strong>Proveedor:</strong> ${registro.Proveedor}</p>
+                                <div class="botones-edicion">
+                                    <button onclick="IniciarEdicion(${index})" class="boton-editar">Editar</button>
+                                    <button onclick="EliminarRegistro(${index})" class="boton-eliminar">Eliminar</button>
+                                </div>
+                            </div>
+                        `;
+                    }
+                });
+
+                Container.innerHTML = HTML;
+            }
+
+            function IniciarEdicion(index) {
+                Registros[index].editando = true;
+                ActualizarListaRegistros();
+            }
+
+            function CancelarEdicion(index) {
+                Registros[index].editando = false;
+                ActualizarListaRegistros();
+            }
+
+            function GuardarCambios(index) {
+                const nuevoIMEI = document.getElementById(
+                    `edit-IMEI-${index}`,
+                ).value;
+                const nuevaBateria3u = parseFloat(
+                    document.getElementById(`edit-Bateria3u-${index}`).value,
+                );
+                const nuevaBateriaDevice = parseFloat(
+                    document.getElementById(`edit-BateriaDevice-${index}`)
+                        .value,
+                );
+                const nuevoModelo = document.getElementById(
+                    `edit-Modelo-${index}`,
+                ).value;
+                const nuevaVariante = document.getElementById(
+                    `edit-Variante-${index}`,
+                ).value;
+
+                // Validar batería
+                if (nuevaBateria3u > 100 || nuevaBateriaDevice > 100) {
+                    alert("El porcentaje de batería no puede ser mayor a 100%");
+                    return;
+                }
+
+                // Validar IMEI
+                if (
+                    nuevoIMEI !== Registros[index].IMEI &&
+                    ValidarIMEIDuplicado(nuevoIMEI, index)
+                ) {
+                    alert(
+                        "Este IMEI ya existe en los registros. No se permiten IMEI duplicados.",
+                    );
+                    return;
+                }
+
+                // Validar que la variante corresponda al modelo
+                let variantesPermitidas = [];
+                switch (nuevoModelo) {
+                    case "iPhone7":
+                    case "iPhone8":
+                        variantesPermitidas = ["Regular", "Plus"];
+                        break;
+                    case "iPhoneX":
+                        variantesPermitidas = ["Regular", "S", "S Max"];
+                        break;
+                    case "iPhone11":
+                        variantesPermitidas = ["Regular", "Pro", "Pro Max"];
+                        break;
+                    case "iPhone12":
+                    case "iPhone13":
+                        variantesPermitidas = [
+                            "Mini",
+                            "Regular",
+                            "Pro",
+                            "Pro Max",
+                        ];
+                        break;
+                    case "iPhone14":
+                    case "iPhone15":
+                    case "iPhone16":
+                        variantesPermitidas = [
+                            "Regular",
+                            "Plus",
+                            "Pro",
+                            "Pro Max",
+                        ];
+                        break;
+                    case "iPhoneSE":
+                        variantesPermitidas = ["2da Gen", "3ra Gen"];
+                        break;
+                    default:
+                        variantesPermitidas = ["Regular"];
+                }
+
+                if (!variantesPermitidas.includes(nuevaVariante)) {
+                    alert(
+                        "La variante seleccionada no es válida para este modelo de iPhone",
+                    );
+                    return;
+                }
+
+                Registros[index] = {
+                    ...Registros[index],
+                    Modelo: nuevoModelo,
+                    Variante: nuevaVariante,
+                    IMEI: nuevoIMEI,
+                    Storage: document.getElementById(`edit-Storage-${index}`)
+                        .value,
+                    Bateria3u: nuevaBateria3u,
+                    BateriaDevice: nuevaBateriaDevice,
+                    Limpieza: document.getElementById(`edit-Limpieza-${index}`)
+                        .value,
+                    DirectoVenta: document.getElementById(
+                        `edit-DirectoVenta-${index}`,
+                    ).value,
+                    Detalles: document.getElementById(`edit-Detalles-${index}`)
+                        .value,
+                    Proveedor: document.getElementById(
+                        `edit-Proveedor-${index}`,
+                    ).value,
+                    editando: false,
+                };
+
+                ActualizarListaRegistros();
+                alert("Cambios guardados exitosamente");
+            }
+
+            function EliminarRegistro(index) {
+                if (confirm("¿Está seguro de eliminar este registro?")) {
+                    Registros.splice(index, 1);
+                    ActualizarListaRegistros();
+                }
+            }
+
+            function generarOpcionesModelo(modeloSeleccionado) {
+                const modelos = [
+                    "iPhone7",
+                    "iPhone8",
+                    "iPhoneX",
+                    "iPhone11",
+                    "iPhone12",
+                    "iPhone13",
+                    "iPhone14",
+                    "iPhone15",
+                    "iPhone16",
+                    "iPhoneSE",
+                ];
+
+                return modelos
+                    .map(
+                        (modelo) =>
+                            `<option value="${modelo}" ${modelo === modeloSeleccionado ? "selected" : ""}>${modelo}</option>`,
+                    )
+                    .join("");
+            }
+
+            function generarOpcionesProveedor(proveedorSeleccionado) {
+                const proveedores = ["FacuF", "Gere", "Gonza"];
+
+                return proveedores
+                    .map(
+                        (proveedor) =>
+                            `<option value="${proveedor}" ${proveedor === proveedorSeleccionado ? "selected" : ""}>${proveedor}</option>`,
+                    )
+                    .join("");
+            }
+
+            function generarOpcionesVariante(modelo, varianteSeleccionada) {
+                let Variantes = ["Regular"];
+
+                switch (modelo) {
+                    case "iPhone7":
+                    case "iPhone8":
+                        Variantes = ["Regular", "Plus"];
+                        break;
+                    case "iPhoneX":
+                        Variantes = ["Regular", "S", "S Max"];
+                        break;
+                    case "iPhone11":
+                        Variantes = ["Regular", "Pro", "Pro Max"];
+                        break;
+                    case "iPhone12":
+                    case "iPhone13":
+                        Variantes = ["Mini", "Regular", "Pro", "Pro Max"];
+                        break;
+                    case "iPhone14":
+                    case "iPhone15":
+                    case "iPhone16":
+                        Variantes = ["Regular", "Plus", "Pro", "Pro Max"];
+                        break;
+                    case "iPhoneSE":
+                        Variantes = ["2da Gen", "3ra Gen"];
+                        break;
+                }
+
+                return Variantes.map(
+                    (variante) =>
+                        `<option value="${variante}" ${variante === varianteSeleccionada ? "selected" : ""}>${variante}</option>`,
+                ).join("");
+            }
+
+            function ExportarExcel() {
+                if (Registros.length === 0) {
+                    alert("No hay datos para exportar");
+                    return;
+                }
+
+                const RegistrosExport = Registros.map((registro) => {
+                    // Crear una copia limpia del registro sin la propiedad 'editando'
+                    const { editando, ...registroLimpio } = registro;
+                    const NuevoRegistro = { ...registroLimpio };
+                    NuevoRegistro.Acciones = "";
+
+                    if (
+                        parseFloat(registro.Bateria3u) < 87 ||
+                        parseFloat(registro.BateriaDevice) < 87
+                    ) {
+                        NuevoRegistro.Acciones = "Necesita cambio de batería";
+                    }
+                    if (
+                        registro.Limpieza == "Si" ||
+                        NuevoRegistro.Acciones == "Necesita cambio de batería"
+                    ) {
+                        NuevoRegistro.Acciones =
+                            "Necesita limpieza y cambio de bateria";
+                    }
+
+                    return NuevoRegistro;
+                });
+
+                const Ws = XLSX.utils.json_to_sheet(RegistrosExport);
+
+                const ColWidths = [
+                    { wch: 15 }, // Modelo
+                    { wch: 10 }, // Variante
+                    { wch: 17 }, // IMEI
+                    { wch: 10 }, // Storage
+                    { wch: 15 }, // Bateria3u
+                    { wch: 15 }, // BateriaDevice
+                    { wch: 10 }, // Limpieza
+                    { wch: 15 }, // DirectoVenta
+                    { wch: 30 }, // Detalles
+                    { wch: 15 }, // Proveedor
+                    { wch: 20 }, // Fecha
+                    { wch: 35 }, // Acciones
+                ];
+
+                Ws["!cols"] = ColWidths;
+
+                const Range = XLSX.utils.decode_range(Ws["!ref"]);
+                const HeaderRange = {
+                    s: { r: 0, c: 0 },
+                    e: { r: 0, c: Range.e.c },
+                };
+
+                for (let C = HeaderRange.s.c; C <= HeaderRange.e.c; ++C) {
+                    const CellRef = XLSX.utils.encode_cell({ r: 0, c: C });
+                    if (!Ws[CellRef]) continue;
+
+                    Ws[CellRef].s = {
+                        fill: {
+                            fgColor: { rgb: "90EE90" },
+                            patternType: "solid",
+                        },
+                        font: {
+                            bold: true,
+                            color: { rgb: "000000" },
+                        },
+                        alignment: {
+                            horizontal: "center",
+                            vertical: "center",
+                        },
+                    };
+                }
+
+                const Wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(Wb, Ws, "Registros");
+
+                XLSX.writeFile(Wb, "Registros_iPhones.xlsx");
+            }
+
+            // Verificar preferencia del sistema al cargar
+            if (
+                window.matchMedia &&
+                window.matchMedia("(prefers-color-scheme: dark)").matches
+            ) {
+                document.documentElement.setAttribute("data-theme", "dark");
+                document.getElementById("modo-oscuro-texto").innerHTML =
+                    "☀️ Modo Claro";
+            }
+
+            // Inicializar la lista de registros al cargar
+            ActualizarListaRegistros();
+        </script>
+    </body>
+</html>
