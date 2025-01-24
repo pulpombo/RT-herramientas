@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Cotización de Usados</title>
+        <link rel="stylesheet" href="../css/global.css" />
+        <link rel="stylesheet" href="../css/CotizacionUsados.css" />
+        <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet" />
+    </head>
+
+    <body>
+        <div class="top-bar glass-effect">
+            <button class="button" onclick="toggleSidebar()" aria-label="Menú">
+                <i class="ri-menu-line"></i>
+            </button>
+            <h1 class="text-gradient">Cotización de Usados</h1>
+            <button class="button theme-toggle" onclick="toggleTheme()" aria-label="Cambiar tema">
+                <i class="ri-moon-line"></i>
+            </button>
+        </div>
+
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-content">
+                <button class="button close-btn" onclick="toggleSidebar()" aria-label="Cerrar menú">
+                    <i class="ri-close-line"></i>
+                </button>
+                <nav>
+                    <a href="../index.html" class="fade-in">
+                        <i class="ri-home-line"></i>
+                        Inicio
+                    </a>
+                    <a href="StockReparar.html" class="fade-in">
+                        <i class="ri-tools-line"></i>
+                        Stock de Reparación
+                    </a>
+                    <a href="CelusUsados.html" class="fade-in">
+                        <i class="ri-smartphone-line"></i>
+                        Celulares Usados
+                    </a>
+                    <a href="OrganizadorInsumos.html" class="fade-in">
+                        <i class="ri-archive-line"></i>
+                        Organizador de Insumos
+                    </a>
+                    <a href="ReservaRepuestos.html" class="fade-in">
+                        <i class="ri-settings-2-line"></i>
+                        Reserva de Repuestos
+                    </a>
+                </nav>
+            </div>
+        </div>
+
+        <main class="main-content" id="main-content">
+            <div class="saludo">
+                Calcula el valor de mercado de iPhones usados basado en precios actualizados!
+            </div>
+
+            <div class="contenedor-principal">
+                <div class="formulario-container">
+                    <h2>Datos del iPhone</h2>
+                    <div class="form-group">
+                        <label for="modelo-equipo" class="form-label">Modelo Base:</label>
+                        <select id="modelo-equipo" class="form-input" onchange="ActualizarAlmacenamiento()">
+                            <option value="">Seleccionar Modelo</option>
+                            <option value="iPhone16ProMax">iPhone 16 Pro Max</option>
+                            <option value="iPhone16Pro">iPhone 16 Pro</option>
+                            <option value="iPhone16Plus">iPhone 16 Plus</option>
+                            <option value="iPhone16">iPhone 16</option>
+                            <option value="iPhone15">iPhone 15</option>
+                            <option value="iPhone14">iPhone 14</option>
+                            <option value="iPhone13">iPhone 13</option>
+                            <option value="iPhone12">iPhone 12</option>
+                            <option value="iPhone11">iPhone 11</option>
+                            <option value="iPhoneSE">iPhone SE</option>
+                            <option value="iPhoneXR">iPhone XR</option>
+                            <option value="iPhone8">iPhone 8</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="almacenamiento" class="form-label">Capacidad:</label>
+                        <select id="almacenamiento" class="form-input">
+                            <option value="64">64 GB</option>
+                            <option value="128">128 GB</option>
+                            <option value="256">256 GB</option>
+                            <option value="512">512 GB</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="estado" class="form-label">Estado:</label>
+                        <select id="estado" class="form-input">
+                            <option value="excelente">Excelente (90-100%)</option>
+                            <option value="muyBueno">Muy Bueno (80-89%)</option>
+                            <option value="bueno">Bueno (70-79%)</option>
+                            <option value="regular">Regular (60-69%)</option>
+                            <option value="malo">Malo (menos del 60%)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="bateria" class="form-label">Salud de Batería:</label>
+                        <input type="number" 
+                               id="bateria" 
+                               class="form-input"
+                               min="0"
+                               max="100"
+                               value="100"
+                               placeholder="Porcentaje de batería"/>
+                    </div>
+
+                    <button onclick="CalcularCotizacion()" class="button">
+                        Calcular Cotización
+                    </button>
+                </div>
+
+                <div class="resultados-container">
+                    <h2>Resultados de la Cotización</h2>
+                    <div id="resultados">
+                        <div class="resultado-item">
+                            <div class="resultado-label">Precio de Mercado Nuevo:</div>
+                            <div class="resultado-valor" id="precio-nuevo">-</div>
+                        </div>
+                        <div class="resultado-item">
+                            <div class="resultado-label">Valor Estimado Usado:</div>
+                            <div class="resultado-valor" id="precio-usado">-</div>
+                        </div>
+                        <div class="resultado-item">
+                            <div class="resultado-label">Rango de Precios:</div>
+                            <div class="resultado-valor" id="rango-precios">-</div>
+                        </div>
+                        <div class="resultado-item">
+                            <div class="resultado-label">Recomendación:</div>
+                            <div class="resultado-valor" id="recomendacion">-</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <div id="toast-container" class="toast-container"></div>
+        <script src="../js/global.js"></script>
+        <script src="../js/CotizacionUsados.js"></script>
+    </body>
+</html>

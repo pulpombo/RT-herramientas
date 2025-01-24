@@ -1,0 +1,491 @@
+/* css/ReservaRepuestos.css */
+
+/* Estilos específicos para el botón de modo oscuro */
+.modo-oscuro-btn {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    padding: 12px 24px;
+    background-color: var(--button-bg);
+    color: white;
+    border: none;
+    border-radius: 980px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.modo-oscuro-btn:hover {
+    transform: scale(1.02);
+    background-color: var(--hover-color);
+}
+
+/* Dashboard Stats */
+.dashboard-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    padding: 0 1rem;
+}
+
+.stat-card {
+    background-color: var(--container-bg);
+    border-radius: 15px;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    box-shadow: 0 2px 4px var(--shadow-color);
+    border: 1px solid var(--border-color);
+    transition: transform 0.2s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px var(--shadow-color);
+}
+
+.stat-card i {
+    font-size: 2rem;
+    color: var(--primary-color);
+    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.stat-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-value {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    color: var(--secondary-text);
+}
+
+/* Contenedor Principal */
+.contenedor-principal {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    padding: 0 1rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* Header Actions */
+.header-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.filter-controls {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.filter-controls .form-input {
+    width: auto;
+    min-width: 200px;
+}
+
+/* Timeline Container */
+.timeline-container {
+    background-color: var(--container-bg);
+    border-radius: 15px;
+    padding: 1.5rem;
+    border: 1px solid var(--border-color);
+    margin-bottom: 1.5rem;
+}
+
+.timeline-header {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 1rem;
+}
+
+/* Vista Lista */
+.vista-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.reserva-item {
+    background-color: var(--bg-color);
+    border-radius: 12px;
+    padding: 1.5rem;
+    border: 1px solid var(--border-color);
+    transition: all 0.2s ease;
+}
+
+.reserva-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px var(--shadow-color);
+}
+
+.reserva-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+}
+
+.cliente-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.cliente-nombre {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.cliente-telefono {
+    font-size: 0.9rem;
+    color: var(--secondary-text);
+}
+
+.reserva-estado {
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.estado-pendiente {
+    background-color: #FF9500;
+    color: white;
+}
+
+.estado-encamino {
+    background-color: #5856D6;
+    color: white;
+}
+
+.estado-recibido {
+    background-color: #34C759;
+    color: white;
+}
+
+.estado-instalado {
+    background-color: #007AFF;
+    color: white;
+}
+
+.estado-cancelado {
+    background-color: #FF3B30;
+    color: white;
+}
+
+.reserva-detalles {
+    display: grid;
+    gap: 1rem;
+    margin: 1rem 0;
+}
+
+.detalle-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.detalle-label {
+    color: var(--secondary-text);
+    font-size: 0.9rem;
+}
+
+.detalle-valor {
+    font-weight: 500;
+    color: var(--text-color);
+}
+
+.reserva-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.reserva-actions button {
+    flex: 1;
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+/* Vista Kanban */
+.vista-kanban {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+    overflow-x: auto;
+    padding-bottom: 1rem;
+}
+
+.kanban-columna {
+    background-color: var(--bg-color);
+    border-radius: 12px;
+    padding: 1rem;
+    min-width: 250px;
+}
+
+.kanban-header {
+    font-weight: 600;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--border-color);
+}
+
+/* Vista Calendario */
+.vista-calendario {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.5rem;
+}
+
+.dia-calendario {
+    background-color: var(--bg-color);
+    border-radius: 8px;
+    padding: 0.5rem;
+    min-height: 100px;
+    border: 1px solid var(--border-color);
+}
+
+.dia-header {
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+/* Modal de Seguimiento */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+
+.modal-content {
+    position: relative;
+    background-color: var(--container-bg);
+    margin: 5% auto;
+    padding: 2rem;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 800px;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.timeline-seguimiento {
+    position: relative;
+    padding-left: 2rem;
+}
+
+.timeline-item {
+    position: relative;
+    padding-bottom: 2rem;
+}
+
+.timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -2rem;
+    top: 0;
+    width: 2px;
+    height: 100%;
+    background-color: var(--border-color);
+}
+
+.timeline-item::after {
+    content: '';
+    position: absolute;
+    left: -2.35rem;
+    top: 0;
+    width: 1rem;
+    height: 1rem;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    border: 2px solid var(--container-bg);
+}
+
+/* Formulario Container */
+.formulario-container {
+    background-color: var(--container-bg);
+    border-radius: 20px;
+    padding: 2rem;
+    border: 1px solid var(--border-color);
+    height: fit-content;
+    position: sticky;
+    top: 80px;
+}
+
+.formulario-container h2 {
+    margin-bottom: 1.5rem;
+    color: var(--text-color);
+}
+
+/* Checkbox Group */
+.checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+}
+
+.checkbox-label input[type="checkbox"] {
+    width: 1.2rem;
+    height: 1.2rem;
+    border-radius: 4px;
+    border: 2px solid var(--border-color);
+    cursor: pointer;
+}
+
+/* Export Actions */
+.export-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.export-actions button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Responsive Design */
+@media (max-width: 1400px) {
+    .contenedor-principal {
+        max-width: 95%;
+    }
+}
+
+@media (max-width: 1200px) {
+    .contenedor-principal {
+        grid-template-columns: 1fr;
+    }
+
+    .formulario-container {
+        position: static;
+    }
+}
+
+@media (max-width: 768px) {
+    .dashboard-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .filter-controls {
+        flex-direction: column;
+    }
+
+    .filter-controls .form-input {
+        width: 100%;
+    }
+
+    .timeline-header {
+        flex-direction: column;
+    }
+
+    .timeline-header button {
+        width: 100%;
+    }
+
+    .vista-kanban {
+        grid-template-columns: 1fr;
+    }
+
+    .vista-calendario {
+        grid-template-columns: repeat(1, 1fr);
+    }
+
+    .export-actions {
+        flex-direction: column;
+    }
+
+    .export-actions button {
+        width: 100%;
+    }
+
+    .modal-content {
+        margin: 0;
+        width: 100%;
+        height: 100%;
+        max-height: 100vh;
+        border-radius: 0;
+    }
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.reserva-item {
+    animation: fadeIn 0.3s ease-out;
+}
+
+/* Mejoras para el modo oscuro */
+[data-theme="dark"] .stat-card,
+[data-theme="dark"] .timeline-container,
+[data-theme="dark"] .reserva-item,
+[data-theme="dark"] .kanban-columna,
+[data-theme="dark"] .dia-calendario {
+    background-color: var(--container-bg);
+    border-color: var(--border-color);
+}
+
+/* Efectos de hover mejorados */
+.button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px var(--shadow-color);
+}
+
+.form-input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(var(--primary-color-rgb), 0.1);
+}

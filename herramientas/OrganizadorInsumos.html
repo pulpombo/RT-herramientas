@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Organizador de Insumos</title>
+        <link rel="stylesheet" href="../css/global.css" />
+        <link rel="stylesheet" href="../css/OrganizadorInsumos.css" />
+        <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet" />
+    </head>
+
+    <body>
+        <div class="top-bar glass-effect">
+            <button class="button" onclick="toggleSidebar()" aria-label="Menú">
+                <i class="ri-menu-line"></i>
+            </button>
+            <h1 class="text-gradient">Organizador de Insumos</h1>
+            <button class="button theme-toggle" onclick="toggleTheme()" aria-label="Cambiar tema">
+                <i class="ri-moon-line"></i>
+            </button>
+        </div>
+
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-content">
+                <button class="button close-btn" onclick="toggleSidebar()" aria-label="Cerrar menú">
+                    <i class="ri-close-line"></i>
+                </button>
+                <nav>
+                    <a href="../index.html" class="fade-in">
+                        <i class="ri-home-line"></i>
+                        Inicio
+                    </a>
+                    <a href="StockReparar.html" class="fade-in">
+                        <i class="ri-tools-line"></i>
+                        Stock de Reparación
+                    </a>
+                    <a href="CelusUsados.html" class="fade-in">
+                        <i class="ri-smartphone-line"></i>
+                        Celulares Usados
+                    </a>
+                    <a href="CotizacionUsados.html" class="fade-in">
+                        <i class="ri-money-dollar-circle-line"></i>
+                        Cotización Usados
+                    </a>
+                    <a href="ReservaRepuestos.html" class="fade-in">
+                        <i class="ri-settings-2-line"></i>
+                        Reserva de Repuestos
+                    </a>
+                </nav>
+            </div>
+        </div>
+
+        <main class="main-content" id="main-content">
+            <div class="saludo">
+                Gestiona tu inventario de insumos y repuestos de manera eficiente!
+            </div>
+
+            <div class="dashboard-stats">
+                <div class="stat-card">
+                    <i class="ri-archive-line"></i>
+                    <div class="stat-info">
+                        <span class="stat-value" id="total-insumos">0</span>
+                        <span class="stat-label">Total Insumos</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="ri-alert-line"></i>
+                    <div class="stat-info">
+                        <span class="stat-value" id="stock-bajo">0</span>
+                        <span class="stat-label">Stock Bajo</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="ri-money-dollar-circle-line"></i>
+                    <div class="stat-info">
+                        <span class="stat-value" id="valor-total">$0</span>
+                        <span class="stat-label">Valor Total</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="contenedor-principal">
+                <div class="stock-container">
+                    <div class="header-actions">
+                        <h2>Stock Actual de Insumos</h2>
+                        <div class="filter-controls">
+                            <input type="text" 
+                                   id="buscar-insumo" 
+                                   class="form-input" 
+                                   placeholder="Buscar insumo..."
+                                   onkeyup="FiltrarInsumos()"/>
+                            <select id="filtro-categoria" class="form-input" onchange="FiltrarInsumos()">
+                                <option value="">Todas las categorías</option>
+                                <option value="Pantalla">Pantallas</option>
+                                <option value="Bateria">Baterías</option>
+                                <option value="Modulo">Módulos</option>
+                                <option value="Herramienta">Herramientas</option>
+                                <option value="Otros">Otros</option>
+                            </select>
+                            <select id="ordenar-por" class="form-input" onchange="OrdenarInsumos()">
+                                <option value="nombre">Ordenar por nombre</option>
+                                <option value="cantidad">Ordenar por cantidad</option>
+                                <option value="precio">Ordenar por precio</option>
+                                <option value="categoria">Ordenar por categoría</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="insumos-grid" id="lista-insumos">
+                        <!-- Aquí se insertarán las tarjetas de insumos -->
+                    </div>
+                    <div class="export-actions">
+                        <button onclick="ExportarExcel()" class="button">
+                            <i class="ri-file-excel-line"></i>
+                            Exportar a Excel
+                        </button>
+                        <button onclick="ExportarPDF()" class="button">
+                            <i class="ri-file-pdf-line"></i>
+                            Exportar a PDF
+                        </button>
+                        <button onclick="CompartirWhatsApp()" class="button">
+                            <i class="ri-whatsapp-line"></i>
+                            Compartir por WhatsApp
+                        </button>
+                    </div>
+                </div>
+
+                <div class="formulario-container">
+                    <h2>Agregar/Actualizar Insumo</h2>
+                    <div class="form-group">
+                        <label for="nombre-insumo" class="form-label">Nombre del Insumo:</label>
+                        <input type="text" id="nombre-insumo" class="form-input" required/>
+                    </div>
+                    <div class="form-group">
+                        <label for="categoria-insumo" class="form-label">Categoría:</label>
+                        <select id="categoria-insumo" class="form-input" required>
+                            <option value="">Seleccionar categoría</option>
+                            <option value="Pantalla">Pantalla</option>
+                            <option value="Bateria">Batería</option>
+                            <option value="Modulo">Módulo</option>
+                            <option value="Herramienta">Herramienta</option>
+                            <option value="Otros">Otros</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="cantidad-insumo" class="form-label">Cantidad:</label>
+                        <input type="number" id="cantidad-insumo" class="form-input" min="0" required/>
+                    </div>
+                    <div class="form-group">
+                        <label for="precio-insumo" class="form-label">Precio Unitario:</label>
+                        <input type="number" id="precio-insumo" class="form-input" min="0" step="100" required/>
+                    </div>
+                    <div class="form-group">
+                        <label for="minimo-stock" class="form-label">Stock Mínimo:</label>
+                        <input type="number" id="minimo-stock" class="form-input" min="0" value="5"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="ubicacion-insumo" class="form-label">Ubicación:</label>
+                        <input type="text" id="ubicacion-insumo" class="form-input" placeholder="Ej: Estante A, Cajón 2"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="notas-insumo" class="form-label">Notas:</label>
+                        <textarea id="notas-insumo" class="form-input" rows="3"></textarea>
+                    </div>
+                    <button onclick="AgregarOActualizarInsumo()" class="button">
+                        <i class="ri-save-line"></i>
+                        Guardar Insumo
+                    </button>
+                </div>
+            </div>
+        </main>
+
+        <div id="toast-container" class="toast-container"></div>
+        <script src="../js/global.js"></script>
+        <script src="../js/OrganizadorInsumos.js"></script>
+    </body>
+</html>

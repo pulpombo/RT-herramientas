@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Reserva de Repuestos</title>
+        <link rel="stylesheet" href="../css/global.css" />
+        <link rel="stylesheet" href="../css/ReservaRepuestos.css" />
+        <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet" />
+    </head>
+
+    <body>
+        <div class="top-bar glass-effect">
+            <button class="button" onclick="toggleSidebar()" aria-label="Menú">
+                <i class="ri-menu-line"></i>
+            </button>
+            <h1 class="text-gradient">Reserva de Repuestos</h1>
+            <button class="button theme-toggle" onclick="toggleTheme()" aria-label="Cambiar tema">
+                <i class="ri-moon-line"></i>
+            </button>
+        </div>
+
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-content">
+                <button class="button close-btn" onclick="toggleSidebar()" aria-label="Cerrar menú">
+                    <i class="ri-close-line"></i>
+                </button>
+                <nav>
+                    <a href="../index.html" class="fade-in">
+                        <i class="ri-home-line"></i>
+                        Inicio
+                    </a>
+                    <a href="StockReparar.html" class="fade-in">
+                        <i class="ri-tools-line"></i>
+                        Stock de Reparación
+                    </a>
+                    <a href="OrganizadorInsumos.html" class="fade-in">
+                        <i class="ri-archive-line"></i>
+                        Organizador de Insumos
+                    </a>
+                    <a href="CelusUsados.html" class="fade-in">
+                        <i class="ri-smartphone-line"></i>
+                        Celulares Usados
+                    </a>
+                    <a href="CotizacionUsados.html" class="fade-in">
+                        <i class="ri-money-dollar-circle-line"></i>
+                        Cotización Usados
+                    </a>
+                </nav>
+            </div>
+        </div>
+
+        <main class="main-content" id="main-content">
+            <div class="saludo">
+                Gestiona tus reservas y pedidos de repuestos de manera eficiente!
+            </div>
+
+            <div class="dashboard-stats">
+                <div class="stat-card">
+                    <i class="ri-time-line"></i>
+                    <div class="stat-info">
+                        <span class="stat-value" id="reservas-pendientes">0</span>
+                        <span class="stat-label">Reservas Pendientes</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="ri-calendar-check-line"></i>
+                    <div class="stat-info">
+                        <span class="stat-value" id="reservas-completadas">0</span>
+                        <span class="stat-label">Completadas Hoy</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="ri-money-dollar-circle-line"></i>
+                    <div class="stat-info">
+                        <span class="stat-value" id="valor-pedidos">$0</span>
+                        <span class="stat-label">Valor en Pedidos</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="ri-timer-line"></i>
+                    <div class="stat-info">
+                        <span class="stat-value" id="tiempo-promedio">0d</span>
+                        <span class="stat-label">Tiempo Promedio</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="contenedor-principal">
+                <div class="reservas-container">
+                    <div class="header-actions">
+                        <h2>Reservas y Pedidos</h2>
+                        <div class="filter-controls">
+                            <input type="text" 
+                                   id="buscar-reserva" 
+                                   class="form-input" 
+                                   placeholder="Buscar por cliente o repuesto..."
+                                   onkeyup="FiltrarReservas()"/>
+                            <select id="filtro-estado" class="form-input" onchange="FiltrarReservas()">
+                                <option value="">Todos los estados</option>
+                                <option value="pendiente">Pendiente</option>
+                                <option value="en-camino">En Camino</option>
+                                <option value="recibido">Recibido</option>
+                                <option value="instalado">Instalado</option>
+                                <option value="cancelado">Cancelado</option>
+                            </select>
+                            <select id="filtro-prioridad" class="form-input" onchange="FiltrarReservas()">
+                                <option value="">Todas las prioridades</option>
+                                <option value="alta">Alta</option>
+                                <option value="media">Media</option>
+                                <option value="baja">Baja</option>
+                            </select>
+                            <select id="ordenar-por" class="form-input" onchange="OrdenarReservas()">
+                                <option value="fecha">Por fecha</option>
+                                <option value="prioridad">Por prioridad</option>
+                                <option value="cliente">Por cliente</option>
+                                <option value="estado">Por estado</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="timeline-container">
+                        <div class="timeline-header">
+                            <button class="button" onclick="CambiarVista('lista')">
+                                <i class="ri-list-check-2"></i>
+                                Vista Lista
+                            </button>
+                            <button class="button" onclick="CambiarVista('kanban')">
+                                <i class="ri-layout-masonry-line"></i>
+                                Vista Kanban
+                            </button>
+                            <button class="button" onclick="CambiarVista('calendario')">
+                                <i class="ri-calendar-line"></i>
+                                Vista Calendario
+                            </button>
+                        </div>
+                        <div id="vista-contenedor" class="vista-lista">
+                            <!-- El contenido se llenará dinámicamente según la vista seleccionada -->
+                        </div>
+                    </div>
+
+                    <div class="export-actions">
+                        <button onclick="ExportarExcel()" class="button">
+                            <i class="ri-file-excel-line"></i>
+                            Exportar a Excel
+                        </button>
+                        <button onclick="ExportarPDF()" class="button">
+                            <i class="ri-file-pdf-line"></i>
+                            Exportar a PDF
+                        </button>
+                        <button onclick="CompartirWhatsApp()" class="button">
+                            <i class="ri-whatsapp-line"></i>
+                            Compartir por WhatsApp
+                        </button>
+                        <button onclick="GenerarInforme()" class="button">
+                            <i class="ri-file-chart-line"></i>
+                            Generar Informe
+                        </button>
+                    </div>
+                </div>
+
+                <div class="formulario-container">
+                    <h2>Nueva Reserva/Pedido</h2>
+                    <div class="form-group">
+                        <label for="cliente-nombre" class="form-label">Nombre del Cliente:</label>
+                        <input type="text" id="cliente-nombre" class="form-input" required/>
+                    </div>
+                    <div class="form-group">
+                        <label for="cliente-telefono" class="form-label">Teléfono:</label>
+                        <input type="tel" id="cliente-telefono" class="form-input" required/>
+                    </div>
+                    <div class="form-group">
+                        <label for="modelo-dispositivo" class="form-label">Modelo del Dispositivo:</label>
+                        <select id="modelo-dispositivo" class="form-input" onchange="ActualizarRepuestos()" required>
+                            <option value="">Seleccionar modelo</option>
+                            <!-- Se llenará dinámicamente -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="tipo-repuesto" class="form-label">Tipo de Repuesto:</label>
+                        <select id="tipo-repuesto" class="form-input" required>
+                            <option value="">Seleccionar repuesto</option>
+                            <!-- Se llenará dinámicamente -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="color-repuesto" class="form-label">Color:</label>
+                        <select id="color-repuesto" class="form-input" required>
+                            <option value="">Seleccionar color</option>
+                            <!-- Se llenará dinámicamente -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="calidad-repuesto" class="form-label">Calidad:</label>
+                        <select id="calidad-repuesto" class="form-input" required>
+                            <option value="">Seleccionar calidad</option>
+                            <option value="original">Original</option>
+                            <option value="premium">Premium</option>
+                            <option value="alternativo">Alternativo</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="prioridad" class="form-label">Prioridad:</label>
+                        <select id="prioridad" class="form-input" required>
+                            <option value="">Seleccionar prioridad</option>
+                            <option value="alta">Alta</option>
+                            <option value="media">Media</option>
+                            <option value="baja">Baja</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="fecha-estimada" class="form-label">Fecha Estimada:</label>
+                        <input type="date" id="fecha-estimada" class="form-input" required/>
+                    </div>
+                    <div class="form-group">
+                        <label for="seña" class="form-label">Seña:</label>
+                        <input type="number" id="seña" class="form-input" min="0" step="100"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="notas-pedido" class="form-label">Notas:</label>
+                        <textarea id="notas-pedido" class="form-input" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Notificaciones:</label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="notificar-llegada" checked/>
+                                Notificar al llegar
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="notificar-recordatorio" checked/>
+                                Recordatorios
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="notificar-cambios"/>
+                                Cambios de estado
+                            </label>
+                        </div>
+                    </div>
+                    <button onclick="AgregarReserva()" class="button">
+                        <i class="ri-save-line"></i>
+                        Guardar Reserva
+                    </button>
+                </div>
+            </div>
+        </main>
+
+        <div id="toast-container" class="toast-container"></div>
+
+        <!-- Modal para seguimiento detallado -->
+        <div id="modal-seguimiento" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Seguimiento de Pedido</h2>
+                    <button class="button close-modal" onclick="CerrarModal()">
+                        <i class="ri-close-line"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="timeline-seguimiento">
+                        <!-- Se llenará dinámicamente -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="../js/global.js"></script>
+        <script src="../js/ReservaRepuestos.js"></script>
+    </body>
+</html>

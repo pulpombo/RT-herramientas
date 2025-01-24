@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Stock de Equipos a Reparar</title>
+        <link rel="stylesheet" href="../css/global.css" />
+        <link rel="stylesheet" href="../css/StockReparar.css" />
+        <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet" />
+    </head>
+
+    <body>
+        <div class="top-bar glass-effect">
+            <button class="button" onclick="toggleSidebar()" aria-label="Menú">
+                <i class="ri-menu-line"></i>
+            </button>
+            <h1 class="text-gradient">Stock de Equipos a Reparar</h1>
+            <button class="button theme-toggle" onclick="toggleTheme()" aria-label="Cambiar tema">
+                <i class="ri-moon-line"></i>
+            </button>
+        </div>
+
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-content">
+                <button class="button close-btn" onclick="toggleSidebar()" aria-label="Cerrar menú">
+                    <i class="ri-close-line"></i>
+                </button>
+                <nav>
+                    <a href="../index.html" class="fade-in">
+                        <i class="ri-home-line"></i>
+                        Inicio
+                    </a>
+                    <a href="CelusUsados.html" class="fade-in">
+                        <i class="ri-smartphone-line"></i>
+                        Celulares Usados
+                    </a>
+                    <a href="CotizacionUsados.html" class="fade-in">
+                        <i class="ri-money-dollar-circle-line"></i>
+                        Cotización Usados
+                    </a>
+                    <a href="OrganizadorInsumos.html" class="fade-in">
+                        <i class="ri-tools-line"></i>
+                        Organizador de Insumos
+                    </a>
+                    <a href="ReservaRepuestos.html" class="fade-in">
+                        <i class="ri-settings-2-line"></i>
+                        Reserva de Repuestos
+                    </a>
+                </nav>
+            </div>
+        </div>
+
+        <main class="main-content" id="main-content">
+            <div class="saludo">
+                Herramienta para controlar los equipos en reparación, de la manera más eficiente!
+            </div>
+
+            <div class="contenedor-principal">
+                <div class="stock-container">
+                    <h2>Equipos en Reparación</h2>
+                    <table id="tabla-equipos">
+                        <thead>
+                            <tr>
+                                <th>Cliente</th>
+                                <th>Modelo</th>
+                                <th>IMEI/Serial</th>
+                                <th>Fecha Ingreso</th>
+                                <th>Estado</th>
+                                <th>Detalles</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="lista-equipos">
+                            <!-- Aquí se insertarán las filas de equipos -->
+                        </tbody>
+                    </table>
+                </div>
+                <div class="formulario-container">
+                    <h2>Agregar/Actualizar Equipo</h2>
+                    <div class="form-group">
+                        <label for="cliente-equipo" class="form-label"
+                            >Nombre del Cliente:</label
+                        >
+                        <input type="text" id="cliente-equipo" class="form-input" />
+                    </div>
+                    <div class="form-group">
+                        <label for="modelo-equipo" class="form-label"
+                            >Modelo Base:</label
+                        >
+                        <select
+                            id="modelo-equipo"
+                            class="form-input"
+                            onchange="ActualizarVariantes()"
+                        >
+                            <option value="">Seleccionar Modelo</option>
+                            <option value="iPhone7">iPhone 7</option>
+                            <option value="iPhone8">iPhone 8</option>
+                            <option value="iPhoneX">iPhone X</option>
+                            <option value="iPhone11">iPhone 11</option>
+                            <option value="iPhone12">iPhone 12</option>
+                            <option value="iPhone13">iPhone 13</option>
+                            <option value="iPhone14">iPhone 14</option>
+                            <option value="iPhone15">iPhone 15</option>
+                            <option value="iPhone16">iPhone 16</option>
+                            <option value="iPhoneSE">iPhone SE</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="variante-equipo" class="form-label"
+                            >Variante:</label
+                        >
+                        <select id="variante-equipo" class="form-input">
+                            <option value="Regular">Regular</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="imei-equipo" class="form-label">IMEI:</label>
+                        <input type="text" 
+                               id="imei-equipo" 
+                               class="form-input"
+                               maxlength="15"
+                               minlength="15"
+                               pattern="\d{15}"
+                               onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                               placeholder="15 dígitos numéricos"
+                               title="El IMEI debe contener exactamente 15 dígitos numéricos"/>
+                        <small>El IMEI debe contener exactamente 15 dígitos numéricos</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="estado-equipo" class="form-label"
+                            >Estado:</label
+                        >
+                        <select id="estado-equipo" class="form-input">
+                            <option value="Pendiente">Pendiente</option>
+                            <option value="EnRevision">En Revisión</option>
+                            <option value="EnReparacion">En Reparación</option>
+                            <option value="Listo">Listo para Entrega</option>
+                            <option value="Entregado">Entregado</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="detalles-equipo" class="form-label"
+                            >Detalles:</label
+                        >
+                        <textarea
+                            id="detalles-equipo"
+                            rows="4"
+                            class="form-input"
+                        ></textarea>
+                    </div>
+                    <button onclick="AgregarOActualizarEquipo()" class="button">
+                        Agregar/Actualizar
+                    </button>
+                </div>
+            </div>
+        </main>
+
+        <div id="toast-container" class="toast-container"></div>
+        <script src="../js/global.js"></script>
+        <script src="../js/StockReparar.js"></script>
+    </body>
+</html>

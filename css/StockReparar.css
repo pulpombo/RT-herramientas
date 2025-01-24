@@ -1,0 +1,304 @@
+/* css/StockReparar.css */
+
+/* Estilos específicos para el botón de modo oscuro */
+.modo-oscuro-btn {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    padding: 12px 24px;
+    background-color: var(--button-bg);
+    color: white;
+    border: none;
+    border-radius: 980px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.modo-oscuro-btn:hover {
+    transform: scale(1.02);
+    background-color: var(--hover-color);
+}
+
+/* Estilos para el contenedor principal */
+.contenedor-principal {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    max-width: 1400px;
+    margin: 20px auto;
+    padding: 0 20px;
+}
+
+/* Estilos para el título principal */
+.titulo-principal {
+    text-align: center;
+    font-size: 3.5em;
+    margin-bottom: 10px;
+    font-weight: 600;
+    letter-spacing: -0.003em;
+    color: var(--text-color);
+}
+
+/* Estilos para el saludo */
+.saludo {
+    text-align: center;
+    font-size: 1.2em;
+    margin-bottom: 30px;
+    color: var(--secondary-text);
+    font-weight: 400;
+}
+
+/* Estilos para el contenedor de la tabla de stock */
+.stock-container {
+    background-color: var(--container-bg);
+    border-radius: 20px;
+    box-shadow: 0 2px 4px var(--shadow-color);
+    padding: 30px;
+    border: 1px solid var(--border-color);
+}
+
+.stock-container h2 {
+    font-size: 1.5em;
+    margin-bottom: 20px;
+    color: var(--text-color);
+}
+
+#tabla-equipos {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-bottom: 20px;
+}
+
+#tabla-equipos th {
+    background-color: var(--container-bg);
+    color: var(--text-color);
+    font-weight: 600;
+    padding: 15px;
+    text-align: left;
+    border-bottom: 2px solid var(--border-color);
+}
+
+#tabla-equipos td {
+    padding: 12px 15px;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-color);
+}
+
+#tabla-equipos tbody tr {
+    transition: all 0.2s ease;
+    background-color: var(--container-bg);
+}
+
+#tabla-equipos tbody tr:hover {
+    background-color: var(--bg-color);
+    transform: translateY(-2px);
+    box-shadow: 0 2px 4px var(--shadow-color);
+}
+
+/* Estilos para el contenedor del formulario */
+.formulario-container {
+    background-color: var(--container-bg);
+    border-radius: 20px;
+    box-shadow: 0 2px 4px var(--shadow-color);
+    padding: 30px;
+    border: 1px solid var(--border-color);
+}
+
+.formulario-container h2 {
+    font-size: 1.5em;
+    margin-bottom: 20px;
+    color: var(--text-color);
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--text-color);
+    font-weight: 500;
+}
+
+.form-input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition: all 0.2s ease;
+}
+
+.form-input:focus {
+    border-color: var(--button-bg);
+    box-shadow: 0 0 0 2px rgba(0, 122, 255, 0.1);
+    outline: none;
+}
+
+textarea.form-input {
+    min-height: 100px;
+    resize: vertical;
+}
+
+/* Botones de acción en la tabla */
+.button-action {
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    background-color: var(--button-bg);
+    color: var(--button-text);
+}
+
+.button-error {
+    background-color: var(--error-color);
+    color: white;
+}
+
+.button-error:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 4px var(--shadow-color);
+}
+
+/* Estado badges */
+.estado-badge {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.9em;
+    font-weight: 500;
+}
+
+.estado-pendiente { 
+    background-color: #FFD700; 
+    color: #000; 
+}
+
+.estado-enrevision { 
+    background-color: var(--primary-color); 
+    color: #fff; 
+}
+
+.estado-enreparacion { 
+    background-color: #FF9500; 
+    color: #fff; 
+}
+
+.estado-listo { 
+    background-color: #34C759; 
+    color: #fff; 
+}
+
+.estado-entregado { 
+    background-color: var(--secondary-text); 
+    color: #fff; 
+}
+
+/* Estilos para el botón de inicio */
+.inicio-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 12px 24px;
+    background-color: var(--button-bg);
+    color: white;
+    border: none;
+    border-radius: 980px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.inicio-btn:hover {
+    transform: scale(1.02);
+    background-color: var(--hover-color);
+}
+
+/* Estilos para la barra de navegación de usuarios */
+#main-nav {
+    display: flex;
+    justify-content: flex-end;
+    padding: 10px;
+    gap: 10px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background-color: var(--container-bg);
+    box-shadow: 0 2px 4px var(--shadow-color);
+}
+
+/* Responsive Design */
+@media (max-width: 1400px) {
+    .contenedor-principal {
+        max-width: 95%;
+    }
+}
+
+@media (max-width: 1200px) {
+    .contenedor-principal {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .contenedor-principal {
+        padding: 10px;
+        margin: 10px;
+    }
+
+    .stock-container, 
+    .formulario-container {
+        padding: 15px;
+    }
+
+    #tabla-equipos {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    .titulo-principal {
+        font-size: 2.5em;
+    }
+
+    .saludo {
+        font-size: 1em;
+        padding: 0 15px;
+        margin-bottom: 20px;
+    }
+}
+
+/* Mejoras para el modo oscuro */
+[data-theme="dark"] .form-input {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] .form-input:focus {
+    border-color: var(--primary-color);
+}
+
+[data-theme="dark"] #tabla-equipos tbody tr {
+    background-color: var(--container-bg);
+}
+
+[data-theme="dark"] #tabla-equipos tbody tr:hover {
+    background-color: var(--bg-color);
+}
+
+[data-theme="dark"] .button-action {
+    background-color: var(--button-bg);
+    color: var(--button-text);
+}
+
+[data-theme="dark"] .estado-badge {
+    border: 1px solid var(--border-color);
+}

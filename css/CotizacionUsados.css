@@ -1,0 +1,230 @@
+/* css/CotizacionUsados.css */
+
+/* Estilos específicos para el botón de modo oscuro */
+.modo-oscuro-btn {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    padding: 12px 24px;
+    background-color: var(--button-bg);
+    color: white;
+    border: none;
+    border-radius: 980px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.modo-oscuro-btn:hover {
+    transform: scale(1.02);
+    background-color: var(--hover-color);
+}
+
+/* Contenedor principal */
+.contenedor-principal {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    max-width: 1400px;
+    margin: 20px auto;
+    padding: 0 20px;
+}
+
+/* Estilos para el título principal */
+.titulo-principal {
+    text-align: center;
+    font-size: 3.5em;
+    margin-bottom: 10px;
+    font-weight: 600;
+    letter-spacing: -0.003em;
+}
+
+/* Estilos para el saludo */
+.saludo {
+    text-align: center;
+    font-size: 1.2em;
+    margin-bottom: 30px;
+    color: var(--secondary-text);
+    font-weight: 400;
+}
+
+/* Contenedor del formulario */
+.formulario-container {
+    background-color: var(--container-bg);
+    border-radius: 20px;
+    box-shadow: 0 2px 4px var(--shadow-color);
+    padding: 30px;
+    border: 1px solid var(--border-color);
+}
+
+.formulario-container h2 {
+    font-size: 1.5em;
+    margin-bottom: 20px;
+    color: var(--text-color);
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--text-color);
+    font-weight: 500;
+}
+
+.form-input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition: all 0.2s ease;
+}
+
+.form-input:focus {
+    border-color: var(--button-bg);
+    box-shadow: 0 0 0 2px rgba(0, 122, 255, 0.1);
+    outline: none;
+}
+
+/* Resultados */
+.resultados-container {
+    background-color: var(--container-bg);
+    border-radius: 20px;
+    box-shadow: 0 2px 4px var(--shadow-color);
+    padding: 30px;
+    border: 1px solid var(--border-color);
+}
+
+.resultados-container h2 {
+    font-size: 1.5em;
+    margin-bottom: 20px;
+    color: var(--text-color);
+}
+
+.resultado-item {
+    padding: 15px;
+    border-radius: 10px;
+    background-color: var(--bg-color);
+    margin-bottom: 15px;
+    transition: all 0.2s ease;
+}
+
+.resultado-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 4px var(--shadow-color);
+}
+
+.resultado-label {
+    font-weight: 500;
+    color: var(--secondary-text);
+    margin-bottom: 5px;
+}
+
+.resultado-valor {
+    font-size: 1.2em;
+    color: var(--text-color);
+}
+
+/* Estilos para el contenedor del resultado */
+.resultado-container {
+    flex: 1;
+    min-width: 700px;
+    background-color: var(--container-bg);
+    border-radius: 20px;
+    box-shadow: 0 2px 4px var(--shadow-color);
+    padding: 30px;
+    overflow-y: auto;
+    max-height: 100%;
+    border: 1px solid var(--border-color);
+    margin: 20px;
+    text-align: center;
+}
+.resultado-container h2 {
+    font-size: 2em;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.resultado-container p {
+    font-size: 1.5em;
+    color: var(--success-color);
+    font-weight: bold;
+}
+#imagen-iphone {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+#imagen-iphone img {
+    max-width: 300px;
+    max-height: 300px;
+    object-fit: contain;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px var(--shadow-color);
+}
+
+/* Estilos para el botón de inicio */
+.inicio-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 12px 24px;
+    background-color: var(--button-bg);
+    color: white;
+    border: none;
+    border-radius: 980px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.inicio-btn:hover {
+    transform: scale(1.02);
+    background-color: var(--hover-color);
+}
+
+/* Responsive Design */
+@media (max-width: 1400px) {
+    .contenedor-principal {
+        max-width: 95%;
+    }
+}
+
+@media (max-width: 1200px) {
+    .contenedor-principal {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .contenedor-principal {
+        padding: 10px;
+        margin: 10px;
+    }
+
+    .formulario-container,
+    .resultados-container {
+        padding: 15px;
+    }
+
+    .titulo-principal {
+        font-size: 2.5em;
+    }
+
+    .saludo {
+        font-size: 1em;
+        padding: 0 15px;
+        margin-bottom: 20px;
+    }
+
+    #imagen-iphone img {
+        max-width: 100%;
+    }
+}

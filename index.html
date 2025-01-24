@@ -1,47 +1,865 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es" data-theme="light">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Rosario Tecno Herramientas</title>
-        <link rel="stylesheet" href="styles.css" />
-        <link
-            rel="icon"
-            href="https://cdn-uicons.flaticon.com/2.1.0/uicons-solid-rounded/svg/fi-sr-home.svg"
-            type="image/svg+xml"
-        />
-        <link
-            rel="stylesheet"
-            href="https://cdn-uicons.flaticon.com/2.1.0/uicons-solid-rounded/css/uicons-solid-rounded.css"
-        />
-    </head>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Utilidades RT</title>
+    <link
+      rel="icon"
+      href="https://cdn-uicons.flaticon.com/2.1.0/uicons-solid-rounded/svg/fi-sr-home.svg"
+      type="image/svg+xml"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn-uicons.flaticon.com/2.1.0/uicons-solid-rounded/css/uicons-solid-rounded.css"
+    />
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css/global.css" />
+    <style>
+      /* css/global.css */
 
-    <body>
-        <div class="top-bar">
-            <button class="toggle-btn" onclick="toggleSidebar()">☰</button>
-            <h1>Rosario Tecno Herramientas</h1>
-            <button class="theme-toggle" onclick="toggleTheme()">🌓</button>
-        </div>
+      /* Importación de fuentes */
+      @import url("https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@400;500;600;700&display=swap");
 
-        <div class="sidebar" id="sidebar">
-            <button class="close-btn" onclick="toggleSidebar()">✖</button>
-            <div class="sidebar-content">
-                <a href="index.html">Inicio</a>
-                <!-- Removed the Registro de Celulares link from here -->
-                <a href="#">Herramienta 2</a>
-                <a href="#">Herramienta 3</a>
+      /* Variables de tema claro/oscuro */
+      :root[data-theme="light"] {
+        --bg-color: #f5f5f7;
+        --text-color: #1d1d1f;
+        --container-bg: #ffffff;
+        --item-bg: #ffffff;
+        --shadow-color: rgba(0, 0, 0, 0.1);
+        --border-color: #d1d1d6;
+        --hover-color: #0077ed;
+        --secondary-text: #6e6e73;
+        --button-bg: #0071e3;
+        --success-color: #34c759;
+        --error-color: #ff3b30;
+        --warning-color: #ffcc00;
+        --info-color: #007aff;
+      }
+
+      :root[data-theme="dark"] {
+        --bg-color: #000000;
+        --text-color: #f5f5f7;
+        --container-bg: #1d1d1f;
+        --item-bg: #1d1d1f;
+        --shadow-color: rgba(0, 0, 0, 0.3);
+        --border-color: #424245;
+        --hover-color: #2997ff;
+        --secondary-text: #86868b;
+        --button-bg: #0077ed;
+        --success-color: #32d74b;
+        --error-color: #ff453a;
+        --warning-color: #ffd60a;
+        --info-color: #0a84ff;
+      }
+
+      /* Estilos base */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont,
+          sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      body {
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        transition: all 0.3s ease;
+        line-height: 1.47059;
+        letter-spacing: -0.022em;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        background-image: url("https://source.unsplash.com/1920x1080/?abstract,background");
+        background-size: cover;
+        background-position: center;
+      }
+
+      /* Barra superior común */
+      .top-bar {
+        background-color: var(--container-bg);
+        padding: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 2px 4px var(--shadow-color);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+
+      .top-bar h1 {
+        font-size: 1.5em;
+        font-weight: 600;
+      }
+
+      /* Botones comunes */
+      .button {
+        padding: 12px 24px;
+        background-color: var(--button-bg);
+        color: white;
+        border: none;
+        border-radius: 980px;
+        cursor: pointer;
+        font-size: 1em;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+      }
+
+      .button:hover {
+        transform: scale(1.02);
+        background-color: var(--hover-color);
+      }
+
+      .button-success {
+        background-color: var(--success-color);
+      }
+
+      .button-error {
+        background-color: var(--error-color);
+      }
+
+      .button-warning {
+        background-color: var(--warning-color);
+      }
+
+      .button-info {
+        background-color: var(--info-color);
+      }
+
+      .button:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      /* Contenedores comunes */
+      .container {
+        background-color: rgba(var(--container-bg-rgb), 0.9);
+        border-radius: 20px;
+        box-shadow: 0 2px 4px var(--shadow-color);
+        padding: 30px;
+        margin: 20px;
+        border: 1px solid var(--border-color);
+        backdrop-filter: blur(10px);
+      }
+
+      /* Sistema de notificaciones (Toast) */
+      .toast-container {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 1000;
+      }
+
+      .toast {
+        padding: 15px 25px;
+        margin-bottom: 10px;
+        border-radius: 12px;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        min-width: 300px;
+        max-width: 500px;
+        animation: slideIn 0.3s ease forwards;
+        box-shadow: 0 4px 12px var(--shadow-color);
+      }
+
+      .toast-success {
+        background-color: var(--success-color);
+      }
+      .toast-error {
+        background-color: var(--error-color);
+      }
+      .toast-warning {
+        background-color: var(--warning-color);
+      }
+      .toast-info {
+        background-color: var(--info-color);
+      }
+
+      .toast-close {
+        background: none;
+        border: none;
+        font-size: 1.3em;
+        cursor: pointer;
+        color: white;
+      }
+
+      @keyframes slideIn {
+        from {
+          transform: translateX(100%);
+          opacity: 0;
+        }
+
+        to {
+          transform: translateX(0);
+          opacity: 1;
+        }
+      }
+
+      @keyframes slideOut {
+        from {
+          transform: translateX(0);
+          opacity: 1;
+        }
+
+        to {
+          transform: translateX(100%);
+          opacity: 0;
+        }
+      }
+
+      /* Formularios comunes */
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      .form-label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 500;
+        color: var(--text-color);
+      }
+
+      .form-input {
+        width: 100%;
+        padding: 12px;
+        background-color: var(--item-bg);
+        color: var(--text-color);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        font-size: 1em;
+        transition: all 0.3s ease;
+      }
+
+      .form-input:focus {
+        outline: none;
+        border-color: var(--button-bg);
+        box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.2);
+      }
+
+      /* Loading Spinner */
+      .spinner {
+        width: 40px;
+        height: 40px;
+        border: 4px solid var(--border-color);
+        border-top: 4px solid var(--button-bg);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* Modal común */
+      .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+      }
+
+      .modal {
+        background-color: var(--container-bg);
+        padding: 30px;
+        border-radius: 20px;
+        max-width: 500px;
+        width: 90%;
+        position: relative;
+      }
+
+      .modal-close {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: none;
+        border: none;
+        font-size: 1.5em;
+        cursor: pointer;
+        color: var(--text-color);
+      }
+
+      /* Scrollbar personalizado */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: var(--bg-color);
+        border-radius: 4px;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: var(--secondary-text);
+        border-radius: 4px;
+      }
+
+      ::-webkit-scrollbar-thumb:hover {
+        background: var(--text-color);
+      }
+
+      /* Firefox scrollbar */
+      * {
+        scrollbar-width: thin;
+        scrollbar-color: var(--secondary-text) var(--bg-color);
+      }
+
+      /* Media Queries */
+      @media (max-width: 768px) {
+        .container {
+          margin: 10px;
+          padding: 20px;
+        }
+
+        .button {
+          width: 100%;
+          margin-bottom: 10px;
+        }
+
+        .toast-container {
+          left: 20px;
+          right: 20px;
+        }
+
+        .toast {
+          min-width: unset;
+          width: 100%;
+        }
+
+        .modal {
+          width: 95%;
+          margin: 10px;
+        }
+      }
+
+      /* Index.html Styles */
+      .main-content {
+        padding: 20px;
+        margin-left: 0;
+        transition: all 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding-bottom: 70px;
+      }
+
+      .main-content.sidebar-open {
+        margin-left: 0;
+      }
+
+      .hero-section {
+        text-align: center;
+        padding: 40px 20px;
+      }
+
+      .hero-section h1 {
+        font-size: 2.5em;
+        margin-bottom: 10px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+      }
+
+      .title-highlight {
+        color: var(--button-bg);
+      }
+
+      .hero-section p {
+        font-size: 1.1em;
+        color: var(--secondary-text);
+        max-width: 700px;
+        margin: 0 auto;
+        padding: 0 15px;
+      }
+
+      .tools-container {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 20px;
+        padding: 10px;
+        max-width: 100%;
+        margin: 0 auto;
+      }
+
+      .tool {
+        background-color: var(--container-bg);
+        border-radius: 20px;
+        box-shadow: 0 2px 4px var(--shadow-color);
+        overflow: hidden;
+        border: 1px solid var(--border-color);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .tool:hover {
+        transform: scale(1.02);
+        box-shadow: 0 6px 12px var(--shadow-color);
+      }
+      .tool-link {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 30px 20px;
+        text-decoration: none;
+        color: var(--text-color);
+        transition: transform 0.2s ease;
+      }
+
+      .tool-icon {
+        font-size: 3em;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .tool-icon > i {
+        line-height: 1;
+      }
+
+      .tool-title {
+        font-size: 1.3em;
+        font-weight: 500;
+        margin-bottom: 5px;
+        text-align: center;
+      }
+
+      .tool-desc {
+        color: var(--secondary-text);
+        text-align: center;
+        font-size: 0.9em;
+      }
+
+      .sidebar-content a i {
+        margin-right: 10px;
+      }
+      /* Animaciones más suaves */
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+      .tool {
+        animation: fadeIn 0.3s ease-in-out;
+      }
+
+      .top-bar button {
+        background: none;
+        border: none;
+        color: var(--text-color);
+        font-size: 1.5em;
+        cursor: pointer;
+        padding: 0;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+        border-radius: 50%;
+        background-color: var(--container-bg);
+        box-shadow: 0 2px 5px var(--shadow-color);
+      }
+
+      .top-bar button:hover {
+        color: var(--button-bg);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px var(--shadow-color);
+      }
+
+      .top-bar button:active {
+        transform: translateY(0);
+      }
+
+      .top-bar button i {
+        font-size: 1.2em;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .toggle-btn,
+      .theme-toggle {
+        /* Eliminar estos estilos */
+      }
+
+      .sidebar {
+        position: fixed;
+        top: 0;
+        left: -250px;
+        width: 250px;
+        height: 100%;
+        background-color: var(--container-bg);
+        transition: left 0.3s ease;
+        z-index: 1000;
+        overflow-y: auto;
+        box-shadow: 2px 0 5px var(--shadow-color);
+      }
+
+      .sidebar.open {
+        left: 0;
+      }
+
+      .sidebar-content {
+        padding: 20px;
+      }
+
+      .sidebar-content a {
+        display: flex;
+        align-items: center;
+        padding: 12px 15px;
+        color: var(--text-color);
+        text-decoration: none;
+        transition: all 0.2s ease;
+        border-radius: 10px;
+        margin-bottom: 5px;
+      }
+
+      .sidebar-content a:hover {
+        color: var(--hover-color);
+        background-color: var(--bg-color);
+        transform: translateX(5px);
+      }
+
+      .sidebar-content a i {
+        margin-right: 12px;
+        font-size: 1.2em;
+        min-width: 24px;
+        text-align: center;
+      }
+
+      .close-btn {
+        background: none;
+        border: none;
+        color: var(--text-color);
+        font-size: 1.5em;
+        cursor: pointer;
+        padding: 0;
+        width: 40px;
+        height: 40px;
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+        border-radius: 50%;
+        background-color: var(--container-bg);
+      }
+
+      .close-btn:hover {
+        color: var(--button-bg);
+        transform: rotate(90deg);
+      }
+
+      /* Ajuste para el contenido principal cuando la sidebar está abierta */
+      .main-content.sidebar-open {
+        margin-left: 250px;
+      }
+
+      /* Media query para dispositivos móviles */
+      @media (max-width: 768px) {
+        .sidebar {
+          width: 100%;
+          left: -100%;
+        }
+
+        .main-content.sidebar-open {
+          margin-left: 0;
+          transform: translateX(0);
+        }
+        
+        .sidebar-content a:hover {
+          transform: translateX(0);
+          background-color: var(--bg-color);
+        }
+      }
+
+      /* Ajuste del grid de herramientas */
+      .tools-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 20px;
+        padding: 20px;
+        max-width: 1200px;
+        margin: 0 auto;
+        width: 100%;
+      }
+
+      .welcome-quote {
+        opacity: 0;
+        transform: translateY(-20px);
+        animation: fadeInSlideDown 1s ease forwards;
+        text-align: center;
+        margin: 2rem auto;
+        max-width: 800px;
+        font-style: italic;
+        color: var(--text-color);
+      }
+
+      .quote-author {
+        opacity: 0;
+        transform: translateY(-20px);
+        animation: fadeInSlideDown 1s ease forwards 0.5s;
+        text-align: right;
+        color: var(--secondary-text);
+        margin-top: 0.5rem;
+      }
+
+      @keyframes fadeInSlideDown {
+        from {
+          opacity: 0;
+          transform: translateY(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .welcome-container {
+        background: rgba(var(--container-bg-rgb), 0.8);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 2rem;
+        margin: 2rem auto;
+        max-width: 800px;
+        text-align: center;
+        box-shadow: 0 4px 6px var(--shadow-color);
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="top-bar glass-effect">
+      <div></div>
+      <h1 class="text-gradient">Utilidades RT</h1>
+      <button class="button theme-toggle" onclick="toggleTheme()" aria-label="Cambiar tema">
+        <i class="ri-moon-line"></i>
+      </button>
+    </div>
+
+    <div class="sidebar" id="sidebar">
+      <div class="sidebar-content">
+        <button class="button close-btn" onclick="toggleSidebar()" aria-label="Cerrar menú">
+          <i class="ri-close-line"></i>
+        </button>
+        <nav>
+          <a href="herramientas/CelusUsados.html" class="fade-in">
+            <i class="ri-smartphone-line"></i>
+            Celulares Usados
+          </a>
+          <a href="herramientas/CotizacionUsados.html" class="fade-in">
+            <i class="ri-money-dollar-circle-line"></i>
+            Cotización Usados
+          </a>
+          <a href="herramientas/OrganizadorInsumos.html" class="fade-in">
+            <i class="ri-tools-line"></i>
+            Organizador de Insumos
+          </a>
+          <a href="herramientas/ReservaRepuestos.html" class="fade-in">
+            <i class="ri-settings-2-line"></i>
+            Reserva de Repuestos
+          </a>
+          <a href="herramientas/StockReparar.html" class="fade-in">
+            <i class="ri-hammer-line"></i>
+            Stock a Reparar
+          </a>
+        </nav>
+      </div>
+    </div>
+
+    <main class="main-content" id="main-content">
+      <div class="welcome-container">
+        <h2 class="welcome-title">¡Bienvenido a las Utilidades RT!</h2>
+        <div id="welcome-quote" class="welcome-quote"></div>
+        <div id="quote-author" class="quote-author"></div>
+      </div>
+
+      <div class="tools-grid">
+        <div class="tool">
+          <a href="herramientas/StockReparar.html" class="tool-link">
+            <div class="tool-icon">
+              <i class="ri-tools-line"></i>
             </div>
+            <h3 class="tool-title">Stock de Reparación</h3>
+            <p class="tool-desc">Gestiona los equipos en reparación y su estado</p>
+          </a>
         </div>
 
-        <div class="registro-container">
-            <a href="CelusUsados.html" class="btn-registro"
-                >📱 Registrar Celular</a
-            >
-            <div class="descripcion">
-                Esta es la herramienta para registrar celulares usados! <br />
+        <div class="tool">
+          <a href="herramientas/CelusUsados.html" class="tool-link">
+            <div class="tool-icon">
+              <i class="ri-smartphone-line"></i>
             </div>
+            <h3 class="tool-title">Celulares Usados</h3>
+            <p class="tool-desc">Administra el inventario de celulares usados</p>
+          </a>
         </div>
 
-        <script src="scripts.js"></script>
-    </body>
+        <div class="tool">
+          <a href="herramientas/CotizacionUsados.html" class="tool-link">
+            <div class="tool-icon">
+              <i class="ri-money-dollar-circle-line"></i>
+            </div>
+            <h3 class="tool-title">Cotización Usados</h3>
+            <p class="tool-desc">Calcula el valor de equipos usados</p>
+          </a>
+        </div>
+
+        <div class="tool">
+          <a href="herramientas/OrganizadorInsumos.html" class="tool-link">
+            <div class="tool-icon">
+              <i class="ri-archive-line"></i>
+            </div>
+            <h3 class="tool-title">Organizador de Insumos</h3>
+            <p class="tool-desc">Gestiona el inventario de insumos y repuestos</p>
+          </a>
+        </div>
+
+        <div class="tool">
+          <a href="herramientas/ReservaRepuestos.html" class="tool-link">
+            <div class="tool-icon">
+              <i class="ri-settings-2-line"></i>
+            </div>
+            <h3 class="tool-title">Reserva de Repuestos</h3>
+            <p class="tool-desc">Administra las reservas de repuestos</p>
+          </a>
+        </div>
+      </div>
+    </main>
+
+    <div id="toast-container" class="toast-container"></div>
+    
+    <!-- Scripts -->
+    <script>
+      function toggleSidebar() {
+        const sidebar = document.getElementById("sidebar");
+        const mainContent = document.getElementById("main-content");
+
+        sidebar.classList.toggle("open");
+        mainContent.classList.toggle("sidebar-open");
+
+        // Prevenir el scroll del body cuando la sidebar está abierta en dispositivos móviles
+        if (window.innerWidth <= 768) {
+          document.body.style.overflow = sidebar.classList.contains("open")
+            ? "hidden"
+            : "";
+        }
+      }
+
+      // --- Theme Toggling ---
+      function toggleTheme() {
+        const currentTheme =
+          document.documentElement.getAttribute("data-theme");
+        const newTheme = currentTheme === "light" ? "dark" : "light";
+
+        document.documentElement.setAttribute("data-theme", newTheme);
+        localStorage.setItem("theme", newTheme);
+        updateThemeButtonText(newTheme);
+      }
+
+      function updateThemeButtonText(theme) {
+        const themeButtons = document.querySelectorAll(".theme-toggle");
+        themeButtons.forEach((button) => {
+          button.textContent = theme === "light" ? "" : "";
+        });
+      }
+
+      // --- Initialization ---
+      if (!localStorage.getItem("theme")) {
+        localStorage.setItem("theme", "light");
+      }
+
+      document.documentElement.setAttribute(
+        "data-theme",
+        localStorage.getItem("theme")
+      );
+      updateThemeButtonText(localStorage.getItem("theme"));
+
+      // Auto dark mode preference on load
+      if (
+        window.matchMedia &&
+        window.matchMedia("(prefers-color-scheme: dark)").matches
+      ) {
+        document.documentElement.setAttribute("data-theme", "dark");
+        localStorage.setItem("theme", "dark");
+        updateThemeButtonText("dark");
+      }
+
+      const frases = [
+        {
+          texto: "Dale che, organizate como corresponde, que el orden es el primer paso al éxito.",
+          autor: "El Tano del Taller"
+        },
+        {
+          texto: "Con la prolijidad de un asado bien hecho, así hay que llevar los números.",
+          autor: "Don Alberto, Técnico de la Vieja Escuela"
+        },
+        {
+          texto: "Más ordenado que mesa de domingo en lo de la abuela, así tiene que estar el inventario.",
+          autor: "Doña Rosa, Comerciante de Toda la Vida"
+        },
+        {
+          texto: "Como el mate, paso a paso y sin apuro, pero bien hecho.",
+          autor: "Jorge, El Maestro del Barrio"
+        },
+        {
+          texto: "La organización es como el dulce de leche, hace todo mejor.",
+          autor: "Marta, La Emprendedora"
+        },
+        {
+          texto: "Laburando con ganas, como Messi en la cancha.",
+          autor: "El Pibe del Local"
+        },
+        {
+          texto: "Prolijo como un buen corte de pelo en la peluquería del barrio.",
+          autor: "Carlos, El Técnico Veterano"
+        },
+        {
+          texto: "Con la precisión de un buen tiro libre y la paciencia de un pescador.",
+          autor: "El Negro, Técnico Master"
+        },
+        {
+          texto: "Más organizado que cajón de verdulero, así hay que tener todo.",
+          autor: "Don Manuel, Sabio del Comercio"
+        },
+        {
+          texto: "Como las medialunas del bar de la esquina: siempre fresquito y ordenado.",
+          autor: "La Tía Mabel"
+        }
+      ];
+
+      function mostrarFraseAleatoria() {
+        const indice = Math.floor(Math.random() * frases.length);
+        const frase = frases[indice];
+        
+        document.getElementById('welcome-quote').textContent = frase.texto;
+        document.getElementById('quote-author').textContent = `- ${frase.autor}`;
+      }
+
+      // Mostrar una frase al cargar la página
+      document.addEventListener('DOMContentLoaded', mostrarFraseAleatoria);
+    </script>
+  </body>
 </html>
