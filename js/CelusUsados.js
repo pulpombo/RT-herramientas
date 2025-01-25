@@ -1,1008 +1,701 @@
 // js/CelusUsados.js
 
-// Configuración mejorada
+// Configuración inicial y variables globales
 const CONFIG = {
-    BATERIA: {
-        OPTIMA: 90,
-        BUENA: 80,
-        REGULAR: 70
+    STORAGE_KEY: 'celulares_usados',
+    CHART_COLORS: {
+        primary: '#4CAF50',
+        secondary: '#2196F3',
+        accent: '#FFC107',
+        danger: '#F44336'
     },
-    ALERTAS: {
-        BATERIA_BAJA: 75,
-        STOCK_BAJO: 5,
-        INTERVALO_VERIFICACION: 300000 // 5 minutos
-    },
-    PRECIOS: {
-        MINIMO_PORCENTAJE: 0.6, // 60% del precio nuevo
-        MAXIMO_PORCENTAJE: 0.85 // 85% del precio nuevo
-    },
-    GRAFICOS: {
-        COLORES: [
-            'rgba(54, 162, 235, 0.8)',
-            'rgba(255, 99, 132, 0.8)',
-            'rgba(75, 192, 192, 0.8)',
-            'rgba(255, 206, 86, 0.8)',
-            'rgba(153, 102, 255, 0.8)'
-        ]
+    ANIMATION_DURATION: 300,
+    MAX_ITEMS_PER_PAGE: 12,
+    MODELOS_IPHONE: {
+        'iPhone X': ['Regular'],
+        'iPhone XS': ['Regular', 'Max'],
+        'iPhone XR': ['Regular'],
+        'iPhone 11': ['Regular', 'Pro', 'Pro Max'],
+        'iPhone 12': ['Mini', 'Regular', 'Pro', 'Pro Max'],
+        'iPhone 13': ['Mini', 'Regular', 'Pro', 'Pro Max'],
+        'iPhone 14': ['Regular', 'Plus', 'Pro', 'Pro Max'],
+        'iPhone 15': ['Regular', 'Plus', 'Pro', 'Pro Max']
     }
 };
 
-// Variables globales con persistencia
-let Registros = JSON.parse(localStorage.getItem('registros')) || [];
-let Sesiones = JSON.parse(localStorage.getItem('sesiones')) || [];
-let Estadisticas = JSON.parse(localStorage.getItem('estadisticas')) || {
-    totalRegistros: 0,
-    promediosBateria: {},
-    distribucionModelos: {},
-    tendenciasVenta: [],
-    ultimaActualizacion: null
-};
-let tema = localStorage.getItem('tema') || 'light';
-
-// Sistema de gestión de datos mejorado
-let Celulares = JSON.parse(localStorage.getItem('celulares')) || [];
-let Historial = JSON.parse(localStorage.getItem('historial_celulares')) || [];
-let Configuracion = JSON.parse(localStorage.getItem('config_celulares')) || {
-    alertaStockBajo: 5,
-    alertaBateriaBaja: 80,
-    preciosMinimos: {},
-    preciosMaximos: {},
-    notificaciones: true,
-    temaOscuro: false,
-    ordenRegistros: 'fecha-desc',
-    vistaPredeterminada: 'grid'
+// Estado global de la aplicación
+const state = {
+    celulares: [],
+    filtros: {
+        busqueda: '',
+        estado: 'todos',
+        bateria: 'todas',
+        ordenar: 'fecha'
+    },
+    paginacion: {
+        pagina: 1,
+        total: 0
+    },
+    vista: 'grid',
+    charts: {}
 };
 
-// Función para guardar datos en localStorage
-function guardarDatos() {
-    localStorage.setItem('registros', JSON.stringify(Registros));
-    localStorage.setItem('sesiones', JSON.stringify(Sesiones));
-    localStorage.setItem('celulares', JSON.stringify(Celulares));
-    localStorage.setItem('historial_celulares', JSON.stringify(Historial));
-    localStorage.setItem('config_celulares', JSON.stringify(Configuracion));
-    ActualizarEstadisticas();
-    ActualizarGraficos();
-    VerificarAlertas();
-}
-
-// Función para registrar cambios en el historial
-function registrarHistorial(accion, celular, detalles = '') {
-    const entrada = {
-        fecha: new Date().toISOString(),
-        accion: accion,
-        celular: celular,
-        detalles: detalles,
-        usuario: 'Admin'
-    };
-    
-    Historial.unshift(entrada); // Agregar al inicio para mostrar más recientes primero
-    if (Historial.length > 1000) Historial.pop(); // Mantener historial manejable
-    
-    // Notificar cambios importantes
-    if (['eliminar', 'editar', 'bateria_baja'].includes(accion)) {
-        mostrarNotificacion(`${accion.toUpperCase()}: ${celular.Modelo} - ${detalles}`);
-    }
-    
-    guardarDatos();
-}
-
-// Función para mostrar notificaciones
-function mostrarNotificacion(mensaje, tipo = 'info') {
-    if (!Configuracion.notificaciones) return;
-    
-    if ('Notification' in window && Notification.permission === 'granted') {
-        new Notification('Celulares Usados', {
-            body: mensaje,
-            icon: '/path/to/icon.png'
-        });
-    } else if ('Notification' in window && Notification.permission !== 'denied') {
-        Notification.requestPermission().then(permission => {
-            if (permission === 'granted') {
-                mostrarNotificacion(mensaje, tipo);
+// Clase principal para la gestión de celulares
+class GestorCelulares {
+    constructor() {
+        this.state = {
+            celulares: [],
+            vistaActual: 'grid',
+            paginaActual: 1,
+            itemsPorPagina: 12,
+            filtros: {
+                busqueda: '',
+                modelo: '',
+                estado: ''
             }
-        });
+        };
+        this.initializeEventListeners();
+        this.loadData();
+        this.setupCharts();
+        this.actualizarEstadisticas();
+        this.renderizarRegistros();
     }
-    
-    showToast(tipo, mensaje);
-}
 
-// Función para actualizar gráficos
-function ActualizarGraficos() {
-    actualizarGraficoModelos();
-    actualizarGraficoTendencias();
-}
+    // Inicialización de event listeners
+    initializeEventListeners() {
+        // Formulario de registro
+        document.getElementById('formulario-registro').addEventListener('submit', (e) => {
+            e.preventDefault();
+            this.registrarCelular();
+        });
 
-// Función para actualizar el gráfico de modelos
-function actualizarGraficoModelos() {
-    const ctx = document.getElementById('graficoModelos')?.getContext('2d');
-    if (!ctx) return;
+        // Botones de vista
+        document.querySelectorAll('.vista-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const vista = btn.dataset.vista;
+                this.cambiarVista(vista);
+            });
+        });
 
-    const datos = Object.entries(Estadisticas.distribucionModelos);
-    const modelos = datos.map(([modelo]) => modelo);
-    const cantidades = datos.map(([, cantidad]) => cantidad);
+        // Botón imprimir
+        document.querySelector('.accion-btn.secundario').addEventListener('click', () => {
+            this.imprimirRegistros();
+        });
 
-    new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-            labels: modelos,
-            datasets: [{
-                data: cantidades,
-                backgroundColor: CONFIG.GRAFICOS.COLORES,
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    position: 'right',
-                },
-                title: {
-                    display: true,
-                    text: 'Distribución por Modelo'
-                }
-            }
-        }
-    });
-}
+        // Botón exportar Excel
+        document.querySelector('.accion-btn').addEventListener('click', () => {
+            this.exportarExcel();
+        });
 
-// Función para actualizar el gráfico de tendencias
-function actualizarGraficoTendencias() {
-    const ctx = document.getElementById('graficoTendencia')?.getContext('2d');
-    if (!ctx) return;
+        // Filtros
+        document.getElementById('busqueda').addEventListener('input', (e) => {
+            this.state.filtros.busqueda = e.target.value;
+            this.filtrarYRenderizar();
+        });
 
-    const datos = Estadisticas.tendenciasVenta;
-    const fechas = datos.map(d => new Date(d.fecha).toLocaleDateString());
-    const cantidades = datos.map(d => d.cantidad);
+        document.getElementById('filtro-modelo').addEventListener('change', (e) => {
+            this.state.filtros.modelo = e.target.value;
+            this.filtrarYRenderizar();
+        });
 
-    new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: fechas,
-            datasets: [{
-                label: 'Registros por día',
-                data: cantidades,
-                borderColor: CONFIG.GRAFICOS.COLORES[0],
-                tension: 0.4,
-                fill: true,
-                backgroundColor: `${CONFIG.GRAFICOS.COLORES[0]}33`
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    display: false
-                },
-                title: {
-                    display: true,
-                    text: 'Tendencia de Registros'
-                }
+        document.getElementById('filtro-estado').addEventListener('change', (e) => {
+            this.state.filtros.estado = e.target.value;
+            this.filtrarYRenderizar();
+        });
+
+        // Modal de estadísticas
+        document.getElementById('mostrar-estadisticas').addEventListener('click', () => this.mostrarEstadisticas());
+        document.querySelector('.modal-close').addEventListener('click', () => this.cerrarModal());
+
+        // Autocompletado de modelo
+        this.setupModeloAutocompletado();
+    }
+
+    // Carga inicial de datos
+    loadData() {
+        const savedData = localStorage.getItem(CONFIG.STORAGE_KEY);
+        this.state.celulares = savedData ? JSON.parse(savedData) : [];
+    }
+
+    // Configuración de gráficos
+    setupCharts() {
+        // Gráfico de estados
+        const ctxEstados = document.getElementById('grafico-estados').getContext('2d');
+        state.charts.estados = new Chart(ctxEstados, {
+            type: 'doughnut',
+            data: {
+                labels: ['Excelente', 'Muy Bueno', 'Bueno', 'Regular'],
+                datasets: [{
+                    data: [0, 0, 0, 0],
+                    backgroundColor: Object.values(CONFIG.CHART_COLORS)
+                }]
             },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    ticks: {
-                        stepSize: 1
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
                     }
                 }
             }
-        }
-    });
-}
-
-// Función para ordenar registros
-function ordenarRegistros(registros, criterio = Configuracion.ordenRegistros) {
-    const registrosOrdenados = [...registros];
-    
-    switch (criterio) {
-        case 'fecha-desc':
-            registrosOrdenados.sort((a, b) => new Date(b.Fecha) - new Date(a.Fecha));
-            break;
-        case 'fecha-asc':
-            registrosOrdenados.sort((a, b) => new Date(a.Fecha) - new Date(b.Fecha));
-            break;
-        case 'bateria-desc':
-            registrosOrdenados.sort((a, b) => {
-                const promA = (parseInt(a.Bateria3u) + parseInt(a.BateriaDevice)) / 2;
-                const promB = (parseInt(b.Bateria3u) + parseInt(b.BateriaDevice)) / 2;
-                return promB - promA;
-            });
-            break;
-        case 'bateria-asc':
-            registrosOrdenados.sort((a, b) => {
-                const promA = (parseInt(a.Bateria3u) + parseInt(a.BateriaDevice)) / 2;
-                const promB = (parseInt(b.Bateria3u) + parseInt(b.BateriaDevice)) / 2;
-                return promA - promB;
-            });
-            break;
-        case 'modelo':
-            registrosOrdenados.sort((a, b) => a.Modelo.localeCompare(b.Modelo));
-            break;
-    }
-    
-    return registrosOrdenados;
-}
-
-// Función para cambiar vista
-function cambiarVista(vista) {
-    const container = document.getElementById('lista-registros');
-    if (!container) return;
-    
-    container.className = `vista-${vista}`;
-    Configuracion.vistaPredeterminada = vista;
-    guardarDatos();
-    
-    // Actualizar botones de vista
-    document.querySelectorAll('.vista-btn').forEach(btn => {
-        btn.classList.toggle('active', btn.dataset.vista === vista);
-    });
-}
-
-// Función para exportar a Excel mejorada
-function ExportarExcel() {
-    if (Registros.length === 0) {
-        showToast('warning', 'No hay registros para exportar');
-        return;
-    }
-
-    const wb = XLSX.utils.book_new();
-    
-    // Hoja de registros actuales
-    const wsData = Registros.map(r => ({
-        Modelo: r.Modelo,
-        Variante: r.Variante,
-        IMEI: r.IMEI,
-        Almacenamiento: `${r.Storage}GB`,
-        'Batería 3uTools': `${r.Bateria3u}%`,
-        'Batería Device': `${r.BateriaDevice}%`,
-        'Promedio Batería': `${((parseInt(r.Bateria3u) + parseInt(r.BateriaDevice)) / 2).toFixed(1)}%`,
-        Limpieza: r.Limpieza,
-        'Directo a Venta': r.DirectoVenta,
-        Proveedor: r.Proveedor,
-        Detalles: r.Detalles || '',
-        Fecha: r.Fecha
-    }));
-    
-    const ws = XLSX.utils.json_to_sheet(wsData);
-    
-    // Ajustar anchos de columna
-    const colWidths = {
-        A: 15, // Modelo
-        B: 12, // Variante
-        C: 18, // IMEI
-        D: 15, // Almacenamiento
-        E: 15, // Batería 3uTools
-        F: 15, // Batería Device
-        G: 15, // Promedio Batería
-        H: 12, // Limpieza
-        I: 15, // Directo a Venta
-        J: 15, // Proveedor
-        K: 30, // Detalles
-        L: 20  // Fecha
-    };
-    
-    ws['!cols'] = Object.entries(colWidths).map(([, width]) => ({ wch: width }));
-    
-    XLSX.utils.book_append_sheet(wb, ws, 'Registros');
-    
-    // Hoja de estadísticas
-    const statsData = [
-        ['Estadísticas Generales'],
-        ['Total Registros', Registros.length],
-        ['Última Actualización', new Date().toLocaleString()],
-        [],
-        ['Distribución por Modelo'],
-        ...Object.entries(Estadisticas.distribucionModelos).map(([modelo, cantidad]) => [modelo, cantidad]),
-        [],
-        ['Promedios de Batería por Modelo'],
-        ...Object.entries(Estadisticas.promediosBateria).map(([modelo, datos]) => [
-            modelo,
-            `${(datos.suma / datos.cantidad).toFixed(1)}%`
-        ])
-    ];
-    
-    const wsStats = XLSX.utils.aoa_to_sheet(statsData);
-    XLSX.utils.book_append_sheet(wb, wsStats, 'Estadísticas');
-    
-    // Generar archivo
-    const fecha = new Date().toISOString().split('T')[0];
-    XLSX.writeFile(wb, `Celulares_Usados_${fecha}.xlsx`);
-    
-    showToast('success', 'Archivo Excel generado exitosamente');
-}
-
-// Función para verificar alertas
-function VerificarAlertas() {
-    if (!Configuracion.notificaciones) return;
-    
-    const alertas = [];
-    
-    // Verificar baterías bajas
-    Registros.forEach(registro => {
-        const promedioBateria = (parseInt(registro.Bateria3u) + parseInt(registro.BateriaDevice)) / 2;
-        if (promedioBateria < CONFIG.ALERTAS.BATERIA_BAJA) {
-            alertas.push({
-                tipo: 'warning',
-                mensaje: `Batería baja en ${registro.Modelo} (${promedioBateria.toFixed(1)}%)`
-            });
-        }
-    });
-    
-    // Verificar stock bajo por modelo
-    const stockPorModelo = {};
-    Registros.forEach(registro => {
-        stockPorModelo[registro.Modelo] = (stockPorModelo[registro.Modelo] || 0) + 1;
-    });
-    
-    Object.entries(stockPorModelo).forEach(([modelo, cantidad]) => {
-        if (cantidad <= CONFIG.ALERTAS.STOCK_BAJO) {
-            alertas.push({
-                tipo: 'warning',
-                mensaje: `Stock bajo de ${modelo} (${cantidad} unidades)`
-            });
-        }
-    });
-    
-    // Mostrar alertas
-    alertas.forEach(alerta => {
-        mostrarNotificacion(alerta.mensaje, alerta.tipo);
-    });
-}
-
-// Función para cambiar entre modo oscuro y claro
-function ToggleModoOscuro() {
-    const html = document.documentElement;
-    const modoOscuroTexto = document.getElementById("modo-oscuro-texto");
-
-    tema = html.getAttribute("data-theme") === "light" ? "dark" : "light";
-    html.setAttribute("data-theme", tema);
-    modoOscuroTexto.innerHTML = tema === "light" ? "🌙 Modo Oscuro" : "☀️ Modo Claro";
-    
-    // Guardar preferencia de tema
-    localStorage.setItem('tema', tema);
-}
-
-// Función para actualizar las variantes del modelo de iPhone
-function ActualizarVariantes() {
-    const ModeloSelect = document.getElementById("Modelo");
-    const VarianteSelect = document.getElementById("Variante");
-    const Modelo = ModeloSelect.value;
-
-    VarianteSelect.innerHTML = '<option value="">Seleccionar Variante</option>';
-
-    let Variantes = [];
-
-    switch (Modelo) {
-        case "iPhone X":
-            Variantes = ["Regular"];
-            break;
-        case "iPhone XS":
-            Variantes = ["Regular", "Max"];
-            break;
-        case "iPhone XR":
-            Variantes = ["Regular"];
-            break;
-        case "iPhone 11":
-            Variantes = ["Regular", "Pro", "Pro Max"];
-            break;
-        case "iPhone 11 Pro":
-            Variantes = ["Regular", "Max"];
-            break;
-        case "iPhone 12":
-            Variantes = ["Regular", "Mini"];
-            break;
-        case "iPhone 12 Pro":
-            Variantes = ["Regular", "Max"];
-            break;
-        case "iPhone 13":
-            Variantes = ["Regular", "Mini"];
-            break;
-        case "iPhone 13 Pro":
-            Variantes = ["Regular", "Max"];
-            break;
-        case "iPhone 14":
-            Variantes = ["Regular", "Plus"];
-            break;
-        case "iPhone 14 Pro":
-            Variantes = ["Regular", "Max"];
-            break;
-    }
-
-    Variantes.forEach((variante) => {
-        const Option = document.createElement("option");
-        Option.value = variante;
-        Option.textContent = variante;
-        VarianteSelect.appendChild(Option);
-    });
-}
-
-// Función para validar IMEI
-function ValidarIMEIDuplicado(IMEI, IndexActual = -1) {
-    return !Registros.some((registro, index) => 
-        index !== IndexActual && registro.IMEI === IMEI
-    );
-}
-
-// Función para procesar el registro
-function ProcesarRegistro() {
-    const Modelo = document.getElementById("Modelo").value;
-    const Variante = document.getElementById("Variante").value;
-    const IMEI = document.getElementById("IMEI").value;
-    const Storage = document.getElementById("Storage").value;
-    const Bateria3u = document.getElementById("Bateria3u").value;
-    const BateriaDevice = document.getElementById("BateriaDevice").value;
-    const Limpieza = document.getElementById("Limpieza").value;
-    const DirectoVenta = document.getElementById("DirectoVenta").value;
-    const Detalles = document.getElementById("Detalles").value;
-    const Proveedor = document.getElementById("Proveedor").value;
-
-    // Validaciones
-    if (!Modelo || !IMEI || !Storage || !Bateria3u || !BateriaDevice) {
-        showToast('error', 'Todos los campos son obligatorios');
-        return;
-    }
-
-    if (!ValidarIMEIDuplicado(IMEI)) {
-        showToast('error', 'Este IMEI ya está registrado');
-        return;
-    }
-
-    const registro = {
-        Modelo,
-        Variante,
-        IMEI,
-        Storage,
-        Bateria3u,
-        BateriaDevice,
-        Limpieza,
-        DirectoVenta,
-        Detalles,
-        Proveedor,
-        Fecha: new Date().toLocaleString()
-    };
-
-    Registros.push(registro);
-    guardarDatos();
-    ActualizarListaRegistros();
-    LimpiarFormulario();
-    showToast('success', 'Registro agregado exitosamente');
-}
-
-// Función para limpiar el formulario
-function LimpiarFormulario() {
-    document.getElementById("Modelo").value = "";
-    document.getElementById("Variante").value = "Regular";
-    document.getElementById("IMEI").value = "";
-    document.getElementById("Storage").value = "";
-    document.getElementById("Bateria3u").value = "";
-    document.getElementById("BateriaDevice").value = "";
-    document.getElementById("Limpieza").value = "No";
-    document.getElementById("DirectoVenta").value = "No";
-    document.getElementById("Detalles").value = "";
-    document.getElementById("Proveedor").value = "";
-}
-
-// Función para actualizar la lista de registros
-function ActualizarListaRegistros(registrosFiltrados = null) {
-    const container = document.getElementById('lista-registros');
-    const registrosAMostrar = registrosFiltrados || Registros;
-    
-    container.innerHTML = '';
-
-    registrosAMostrar.forEach((registro, index) => {
-        const card = document.createElement('div');
-        card.className = 'registro-card';
-        
-        const estadoBateria = calcularEstadoBateria(registro.Bateria3u, registro.BateriaDevice);
-        
-        card.innerHTML = `
-            <div class="registro-header">
-                <h3>${registro.Modelo} ${registro.Variante}</h3>
-                <span class="storage-badge">${registro.Storage}GB</span>
-            </div>
-            <div class="registro-info">
-                <p>
-                    <span><strong>IMEI:</strong></span>
-                    <span>${registro.IMEI}</span>
-                </p>
-                <p>
-                    <span><strong>Batería 3uTools:</strong></span>
-                    <span class="bateria-badge ${estadoBateria.clase}">
-                        <i class="ri-battery-2-charge-line"></i>
-                        ${registro.Bateria3u}%
-                    </span>
-                </p>
-                <p>
-                    <span><strong>Batería Device:</strong></span>
-                    <span class="bateria-badge ${estadoBateria.clase}">
-                        <i class="ri-battery-2-charge-line"></i>
-                        ${registro.BateriaDevice}%
-                    </span>
-                </p>
-                <p>
-                    <span><strong>Limpieza:</strong></span>
-                    <span>${registro.Limpieza}</span>
-                </p>
-                <p>
-                    <span><strong>Directo a Venta:</strong></span>
-                    <span>${registro.DirectoVenta}</span>
-                </p>
-                <p>
-                    <span><strong>Proveedor:</strong></span>
-                    <span>${registro.Proveedor}</span>
-                </p>
-                ${registro.Detalles ? `
-                <p>
-                    <span><strong>Detalles:</strong></span>
-                    <span>${registro.Detalles}</span>
-                </p>` : ''}
-                <p>
-                    <span><strong>Fecha:</strong></span>
-                    <span>${registro.Fecha}</span>
-                </p>
-            </div>
-            <div class="registro-actions">
-                <button onclick="EditarRegistro(${index})" class="button">
-                    <i class="ri-edit-line"></i> Editar
-                </button>
-                <button onclick="GenerarSticker(${index})" class="button">
-                    <i class="ri-printer-line"></i> Sticker
-                </button>
-                <button onclick="EliminarRegistro(${index})" class="button button-error">
-                    <i class="ri-delete-bin-line"></i> Eliminar
-                </button>
-            </div>
-        `;
-        container.appendChild(card);
-    });
-
-    ActualizarEstadisticas();
-}
-
-// Función para calcular el estado de la batería
-function calcularEstadoBateria(bateria3u, bateriaDevice) {
-    const promedio = (parseInt(bateria3u) + parseInt(bateriaDevice)) / 2;
-    if (promedio >= 90) return { clase: 'bateria-optima', texto: 'Óptima' };
-    if (promedio >= 80) return { clase: 'bateria-buena', texto: 'Buena' };
-    if (promedio >= 70) return { clase: 'bateria-regular', texto: 'Regular' };
-    return { clase: 'bateria-mala', texto: 'Mala' };
-}
-
-// Función para editar registro
-function EditarRegistro(index) {
-    const registro = Registros[index];
-    
-    document.getElementById("Modelo").value = registro.Modelo;
-    ActualizarVariantes();
-    document.getElementById("Variante").value = registro.Variante;
-    document.getElementById("IMEI").value = registro.IMEI;
-    document.getElementById("Storage").value = registro.Storage;
-    document.getElementById("Bateria3u").value = registro.Bateria3u;
-    document.getElementById("BateriaDevice").value = registro.BateriaDevice;
-    document.getElementById("Limpieza").value = registro.Limpieza;
-    document.getElementById("DirectoVenta").value = registro.DirectoVenta;
-    document.getElementById("Detalles").value = registro.Detalles;
-    document.getElementById("Proveedor").value = registro.Proveedor;
-
-    // Cambiar el botón de guardar
-    const btnGuardar = document.querySelector('button[onclick="ProcesarRegistro()"]');
-    btnGuardar.innerHTML = '<i class="ri-save-line"></i> Actualizar';
-    btnGuardar.onclick = () => GuardarEdicion(index);
-
-    // Agregar botón de cancelar
-    if (!document.getElementById('btnCancelar')) {
-        const btnCancelar = document.createElement('button');
-        btnCancelar.id = 'btnCancelar';
-        btnCancelar.className = 'button button-error';
-        btnCancelar.innerHTML = '<i class="ri-close-line"></i> Cancelar';
-        btnCancelar.onclick = CancelarEdicion;
-        btnGuardar.parentNode.insertBefore(btnCancelar, btnGuardar.nextSibling);
-    }
-}
-
-// Función para guardar edición
-function GuardarEdicion(index) {
-    const IMEI = document.getElementById("IMEI").value;
-    if (!ValidarIMEIDuplicado(IMEI, index)) {
-        showToast('error', 'Este IMEI ya está registrado');
-        return;
-    }
-
-    Registros[index] = {
-        Modelo: document.getElementById("Modelo").value,
-        Variante: document.getElementById("Variante").value,
-        IMEI: IMEI,
-        Storage: document.getElementById("Storage").value,
-        Bateria3u: document.getElementById("Bateria3u").value,
-        BateriaDevice: document.getElementById("BateriaDevice").value,
-        Limpieza: document.getElementById("Limpieza").value,
-        DirectoVenta: document.getElementById("DirectoVenta").value,
-        Detalles: document.getElementById("Detalles").value,
-        Proveedor: document.getElementById("Proveedor").value,
-        Fecha: new Date().toLocaleString()
-    };
-
-    guardarDatos();
-    ActualizarListaRegistros();
-    CancelarEdicion();
-    showToast('success', 'Registro actualizado exitosamente');
-}
-
-// Función para cancelar edición
-function CancelarEdicion() {
-    LimpiarFormulario();
-    const btnGuardar = document.querySelector('button[onclick*="GuardarEdicion"]');
-    btnGuardar.innerHTML = '<i class="ri-save-line"></i> Guardar';
-    btnGuardar.onclick = ProcesarRegistro;
-    
-    const btnCancelar = document.getElementById('btnCancelar');
-    if (btnCancelar) btnCancelar.remove();
-}
-
-// Función para eliminar registro
-function EliminarRegistro(index) {
-    if (confirm('¿Está seguro de eliminar este registro?')) {
-        Registros.splice(index, 1);
-        guardarDatos();
-        ActualizarListaRegistros();
-        showToast('success', 'Registro eliminado exitosamente');
-    }
-}
-
-// Función para guardar sesión
-function GuardarSesion() {
-    if (Registros.length === 0) {
-        showToast('warning', 'No hay registros para guardar');
-        return;
-    }
-
-    const nombreSesion = prompt('Ingrese un nombre para la sesión:');
-    if (nombreSesion) {
-        const sesion = {
-            nombre: nombreSesion,
-            registros: [...Registros],
-            fecha: new Date().toLocaleString(),
-            cantidad: Registros.length
-        };
-        Sesiones.push(sesion);
-        guardarDatos();
-        ActualizarListaSesiones();
-        showToast('success', 'Sesión guardada exitosamente');
-    }
-}
-
-// Función para cargar sesión
-function CargarSesion() {
-    const select = document.getElementById('sesiones-select');
-    const sesionSeleccionada = select.value;
-    
-    if (!sesionSeleccionada) return;
-    
-    const sesion = Sesiones.find(s => s.nombre === sesionSeleccionada);
-    if (sesion) {
-        Registros = [...sesion.registros];
-        guardarDatos();
-        ActualizarListaRegistros();
-        ActualizarMetadataSesion(sesion);
-        showToast('success', 'Sesión cargada exitosamente');
-    }
-}
-
-// Función para actualizar lista de sesiones
-function ActualizarListaSesiones() {
-    const select = document.getElementById('sesiones-select');
-    select.innerHTML = '<option value="">Seleccionar Sesión</option>';
-    
-    Sesiones.forEach(sesion => {
-        const option = document.createElement('option');
-        option.value = sesion.nombre;
-        option.textContent = sesion.nombre;
-        select.appendChild(option);
-    });
-}
-
-// Función para actualizar metadata de sesión
-function ActualizarMetadataSesion(sesion) {
-    const metadata = document.getElementById('sesion-metadata');
-    if (metadata) {
-        metadata.innerHTML = `
-            <strong>Fecha:</strong> ${sesion.fecha} - 
-            <strong>Cantidad de registros:</strong> ${sesion.cantidad}
-        `;
-    }
-}
-
-// Función para actualizar estadísticas
-function ActualizarEstadisticas() {
-    const stats = {
-        totalRegistros: Registros.length,
-        promediosBateria: {},
-        distribucionModelos: {},
-        tendenciasVenta: [],
-        ultimaActualizacion: new Date().toISOString()
-    };
-
-    // Calcular promedios de batería por modelo
-    Registros.forEach(registro => {
-        const modelo = registro.Modelo;
-        if (!stats.promediosBateria[modelo]) {
-            stats.promediosBateria[modelo] = {
-                suma: 0,
-                cantidad: 0
-            };
-        }
-        const promedioBateria = (parseInt(registro.Bateria3u) + parseInt(registro.BateriaDevice)) / 2;
-        stats.promediosBateria[modelo].suma += promedioBateria;
-        stats.promediosBateria[modelo].cantidad++;
-    });
-
-    // Calcular distribución de modelos
-    Registros.forEach(registro => {
-        const modelo = registro.Modelo;
-        stats.distribucionModelos[modelo] = (stats.distribucionModelos[modelo] || 0) + 1;
-    });
-
-    // Calcular tendencias de venta (últimos 30 días)
-    const treintaDiasAtras = new Date();
-    treintaDiasAtras.setDate(treintaDiasAtras.getDate() - 30);
-
-    const ventasPorDia = {};
-    Registros.forEach(registro => {
-        const fecha = new Date(registro.Fecha);
-        if (fecha >= treintaDiasAtras && registro.DirectoVenta === 'Si') {
-            const fechaStr = fecha.toISOString().split('T')[0];
-            ventasPorDia[fechaStr] = (ventasPorDia[fechaStr] || 0) + 1;
-        }
-    });
-
-    stats.tendenciasVenta = Object.entries(ventasPorDia)
-        .map(([fecha, cantidad]) => ({ fecha, cantidad }))
-        .sort((a, b) => new Date(a.fecha) - new Date(b.fecha));
-
-    // Actualizar estadísticas en localStorage
-    Estadisticas = stats;
-    localStorage.setItem('estadisticas', JSON.stringify(stats));
-
-    // Actualizar dashboard
-    ActualizarDashboard();
-}
-
-// Función para actualizar el dashboard
-function ActualizarDashboard() {
-    const totalRegistros = Registros.length;
-    const totalBateriaBuena = Registros.filter(r => 
-        (parseInt(r.Bateria3u) + parseInt(r.BateriaDevice)) / 2 >= CONFIG.BATERIA.BUENA
-    ).length;
-    const totalDirectoVenta = Registros.filter(r => r.DirectoVenta === 'Si').length;
-
-    const stats = document.querySelector('.dashboard-stats');
-    if (stats) {
-        stats.innerHTML = `
-            <div class="stat-card">
-                <i class="ri-smartphone-line"></i>
-                <div class="stat-info">
-                    <span class="stat-value">${totalRegistros}</span>
-                    <span class="stat-label">Total Registros</span>
-                </div>
-            </div>
-            <div class="stat-card">
-                <i class="ri-battery-2-charge-line"></i>
-                <div class="stat-info">
-                    <span class="stat-value">${totalBateriaBuena}</span>
-                    <span class="stat-label">Batería Óptima</span>
-                </div>
-            </div>
-            <div class="stat-card">
-                <i class="ri-shopping-bag-line"></i>
-                <div class="stat-info">
-                    <span class="stat-value">${totalDirectoVenta}</span>
-                    <span class="stat-label">Listos para Venta</span>
-                </div>
-            </div>
-            <div class="stat-card">
-                <i class="ri-line-chart-line"></i>
-                <div class="stat-info">
-                    <span class="stat-value">${calcularTendencia()}%</span>
-                    <span class="stat-label">Tendencia Mensual</span>
-                </div>
-            </div>
-        `;
-    }
-}
-
-// Función para calcular tendencia
-function calcularTendencia() {
-    if (Estadisticas.tendenciasVenta.length < 2) return 0;
-    
-    const ultimosDias = Estadisticas.tendenciasVenta.slice(-7);
-    const promedioReciente = ultimosDias.reduce((sum, dia) => sum + dia.cantidad, 0) / ultimosDias.length;
-    
-    const diasAnteriores = Estadisticas.tendenciasVenta.slice(-14, -7);
-    const promedioAnterior = diasAnteriores.reduce((sum, dia) => sum + dia.cantidad, 0) / diasAnteriores.length;
-    
-    if (promedioAnterior === 0) return 100;
-    
-    const tendencia = ((promedioReciente - promedioAnterior) / promedioAnterior) * 100;
-    return Math.round(tendencia);
-}
-
-// Función para exportar stickers
-function ExportarStickers() {
-    const doc = new jsPDF();
-    const stickersPerPage = 4;
-    let currentY = 10;
-    let currentPage = 1;
-
-    Registros.forEach((registro, index) => {
-        if (index > 0 && index % stickersPerPage === 0) {
-            doc.addPage();
-            currentY = 10;
-            currentPage++;
-        }
-
-        const promedioBateria = (parseInt(registro.Bateria3u) + parseInt(registro.BateriaDevice)) / 2;
-        const estadoBateria = calcularEstadoBateria(registro.Bateria3u, registro.BateriaDevice);
-
-        // Dibujar borde del sticker
-        doc.rect(10, currentY, 190, 60);
-
-        // Título
-        doc.setFontSize(14);
-        doc.setFont('helvetica', 'bold');
-        doc.text(`${registro.Modelo} ${registro.Variante} - ${registro.Storage}GB`, 105, currentY + 10, { align: 'center' });
-
-        // Información principal
-        doc.setFontSize(12);
-        doc.setFont('helvetica', 'normal');
-        doc.text([
-            `IMEI: ${registro.IMEI}`,
-            `Batería: ${promedioBateria.toFixed(1)}% (${estadoBateria.texto})`,
-            `Limpieza: ${registro.Limpieza}`,
-            `Directo a Venta: ${registro.DirectoVenta}`,
-            `Fecha Revisión: ${registro.Fecha}`
-        ], 15, currentY + 20);
-
-        // QR Code con el IMEI
-        const qr = new QRCode(null, {
-            text: registro.IMEI,
-            width: 40,
-            height: 40
         });
-        const qrImage = qr.createDataURL();
-        doc.addImage(qrImage, 'PNG', 150, currentY + 15, 40, 40);
 
-        // Pie del sticker
-        doc.setFontSize(8);
-        doc.text('Rosario Tecno - Revisión y Control de Calidad', 105, currentY + 55, { align: 'center' });
-
-        currentY += 70;
-    });
-
-    doc.save(`Stickers_Celulares_${new Date().toISOString().split('T')[0]}.pdf`);
-    showToast('success', 'Stickers generados exitosamente');
-}
-
-// Función para generar un sticker individual
-function GenerarSticker(index) {
-    const registro = Registros[index];
-    const doc = new jsPDF();
-    
-    // Dibujar borde del sticker
-    doc.rect(10, 10, 190, 60);
-
-    // Título
-    doc.setFontSize(14);
-    doc.setFont('helvetica', 'bold');
-    doc.text(`${registro.Modelo} ${registro.Variante} - ${registro.Storage}GB`, 105, 20, { align: 'center' });
-
-    const promedioBateria = (parseInt(registro.Bateria3u) + parseInt(registro.BateriaDevice)) / 2;
-    const estadoBateria = calcularEstadoBateria(registro.Bateria3u, registro.BateriaDevice);
-
-    // Información principal
-    doc.setFontSize(12);
-    doc.setFont('helvetica', 'normal');
-    doc.text([
-        `IMEI: ${registro.IMEI}`,
-        `Batería: ${promedioBateria.toFixed(1)}% (${estadoBateria.texto})`,
-        `Limpieza: ${registro.Limpieza}`,
-        `Directo a Venta: ${registro.DirectoVenta}`,
-        `Fecha Revisión: ${registro.Fecha}`
-    ], 15, 30);
-
-    // QR Code con el IMEI
-    const qr = new QRCode(null, {
-        text: registro.IMEI,
-        width: 40,
-        height: 40
-    });
-    const qrImage = qr.createDataURL();
-    doc.addImage(qrImage, 'PNG', 150, 25, 40, 40);
-
-    // Pie del sticker
-    doc.setFontSize(8);
-    doc.text('Rosario Tecno - Revisión y Control de Calidad', 105, 65, { align: 'center' });
-
-    doc.save(`Sticker_${registro.Modelo}_${registro.IMEI}.pdf`);
-    showToast('success', 'Sticker generado exitosamente');
-}
-
-// Función para filtrar registros
-function FiltrarRegistros() {
-    const busqueda = document.getElementById('busqueda').value.toLowerCase();
-    const filtroModelo = document.getElementById('filtro-modelo').value;
-    const filtroEstado = document.getElementById('filtro-estado').value;
-
-    const registrosFiltrados = Registros.filter(registro => {
-        const coincideBusqueda = registro.IMEI.includes(busqueda) ||
-            registro.Modelo.toLowerCase().includes(busqueda) ||
-            registro.Detalles?.toLowerCase().includes(busqueda);
-            
-        const coincideModelo = !filtroModelo || registro.Modelo === filtroModelo;
-        const coincideEstado = !filtroEstado || 
-            (filtroEstado === 'optima' && calcularEstadoBateria(registro.Bateria3u, registro.BateriaDevice).clase === 'bateria-optima') ||
-            (filtroEstado === 'venta' && registro.DirectoVenta === 'Si');
-
-        return coincideBusqueda && coincideModelo && coincideEstado;
-    });
-
-    ActualizarListaRegistros(registrosFiltrados);
-}
-
-// Manejo de la sidebar
-document.addEventListener('DOMContentLoaded', function() {
-    const menuBtn = document.getElementById('menu-btn');
-    const sidebar = document.querySelector('.sidebar');
-    const closeBtn = document.querySelector('.close-btn');
-    const overlay = document.createElement('div');
-    overlay.className = 'sidebar-overlay';
-    document.body.appendChild(overlay);
-
-    // Función para abrir/cerrar la sidebar
-    function toggleSidebar() {
-        sidebar.classList.toggle('active');
-        overlay.classList.toggle('active');
-        document.body.style.overflow = sidebar.classList.contains('active') ? 'hidden' : '';
+        // Gráfico de baterías
+        const ctxBaterias = document.getElementById('grafico-baterias').getContext('2d');
+        state.charts.baterias = new Chart(ctxBaterias, {
+            type: 'bar',
+            data: {
+                labels: ['Óptima', 'Buena', 'Regular', 'Baja'],
+                datasets: [{
+                    label: 'Cantidad',
+                    data: [0, 0, 0, 0],
+                    backgroundColor: Object.values(CONFIG.CHART_COLORS)
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    }
+                }
+            }
+        });
     }
 
-    // Event listeners
-    menuBtn.addEventListener('click', toggleSidebar);
-    closeBtn.addEventListener('click', toggleSidebar);
-    overlay.addEventListener('click', toggleSidebar);
+    registrarCelular() {
+        const formData = {
+            modelo: document.getElementById('Modelo').value,
+            variante: document.getElementById('Variante').value,
+            imei: document.getElementById('IMEI').value,
+            almacenamiento: document.getElementById('almacenamiento').value,
+            bateria3u: document.getElementById('bateria3u').value,
+            bateriaDevice: document.getElementById('bateriaDevice').value,
+            limpieza: document.getElementById('limpieza').value,
+            directoVenta: document.getElementById('directoVenta').checked,
+            proveedor: document.getElementById('proveedor').value,
+            detalles: document.getElementById('detalles').value,
+            fecha: new Date().toISOString(),
+            id: Date.now().toString()
+        };
 
-    // Cerrar sidebar con la tecla Escape
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape' && sidebar.classList.contains('active')) {
-            toggleSidebar();
+        if (!this.validarDatos(formData)) {
+            return;
         }
-    });
 
-    ActualizarListaRegistros();
-    ActualizarListaSesiones();
-    ActualizarEstadisticas();
-    ActualizarGraficos();
+        this.state.celulares.unshift(formData);
+        this.guardarDatos();
+        this.filtrarYRenderizar();
+        this.actualizarEstadisticas();
+        this.mostrarNotificacion('Celular registrado exitosamente', 'success');
+        document.getElementById('formulario-registro').reset();
+    }
+
+    validarDatos(data) {
+        if (!data.modelo || !data.imei || !data.almacenamiento) {
+            this.mostrarNotificacion('Por favor complete todos los campos requeridos', 'error');
+            return false;
+        }
+        if (!/^\d{15}$/.test(data.imei)) {
+            this.mostrarNotificacion('El IMEI debe contener exactamente 15 dígitos', 'error');
+            return false;
+        }
+        const imeiExistente = this.state.celulares.some(c => c.imei === data.imei);
+        if (imeiExistente) {
+            this.mostrarNotificacion('Ya existe un celular registrado con este IMEI', 'error');
+            return false;
+        }
+        return true;
+    }
+
+    cambiarVista(vista) {
+        this.state.vistaActual = vista;
+        document.querySelectorAll('.vista-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.vista === vista);
+        });
+        this.filtrarYRenderizar();
+    }
+
+    imprimirRegistros() {
+        const contenido = document.createElement('div');
+        contenido.className = 'print-content';
+        
+        // Encabezado
+        contenido.innerHTML = `
+            <h1>Registro de Celulares Usados</h1>
+            <p>Fecha de impresión: ${new Date().toLocaleDateString()}</p>
+            <hr>
+        `;
+
+        // Tabla de registros
+        const tabla = document.createElement('table');
+        tabla.className = 'print-table';
+        tabla.innerHTML = `
+            <thead>
+                <tr>
+                    <th>Modelo</th>
+                    <th>IMEI</th>
+                    <th>Almacenamiento</th>
+                    <th>Batería</th>
+                    <th>Estado</th>
+                    <th>Proveedor</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${this.state.celulares.map(celular => `
+                    <tr>
+                        <td>${celular.modelo} ${celular.variante}</td>
+                        <td>${celular.imei}</td>
+                        <td>${celular.almacenamiento} GB</td>
+                        <td>${celular.bateria3u}% / ${celular.bateriaDevice}%</td>
+                        <td>${celular.limpieza}</td>
+                        <td>${celular.proveedor}</td>
+                    </tr>
+                `).join('')}
+            </tbody>
+        `;
+        contenido.appendChild(tabla);
+
+        // Estilos para impresión
+        const estilos = `
+            <style>
+                @media print {
+                    .print-content { padding: 20px; }
+                    .print-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+                    .print-table th, .print-table td { 
+                        border: 1px solid #ddd; 
+                        padding: 8px; 
+                        text-align: left; 
+                    }
+                    .print-table th { background-color: #f5f5f5; }
+                    @page { size: landscape; }
+                }
+            </style>
+        `;
+
+        // Crear ventana de impresión
+        const ventanaImpresion = window.open('', '_blank');
+        ventanaImpresion.document.write(estilos + contenido.outerHTML);
+        ventanaImpresion.document.close();
+        ventanaImpresion.print();
+    }
+
+    exportarExcel() {
+        const data = this.state.celulares.map(celular => ({
+            'Modelo': `${celular.modelo} ${celular.variante}`,
+            'IMEI': celular.imei,
+            'Almacenamiento': `${celular.almacenamiento} GB`,
+            'Batería 3uTools': `${celular.bateria3u}%`,
+            'Batería Device': `${celular.bateriaDevice}%`,
+            'Estado Limpieza': celular.limpieza,
+            'Directo a Venta': celular.directoVenta,
+            'Proveedor': celular.proveedor,
+            'Detalles': celular.detalles,
+            'Fecha Registro': new Date(celular.fecha).toLocaleString()
+        }));
+
+        const worksheet = XLSX.utils.json_to_sheet(data);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Celulares');
+
+        // Ajustar anchos de columna
+        const maxWidth = Object.keys(data[0]).reduce((acc, key) => {
+            const maxLength = Math.max(
+                key.length,
+                ...data.map(row => String(row[key]).length)
+            );
+            acc[key] = { wch: maxLength + 2 };
+            return acc;
+        }, {});
+
+        worksheet['!cols'] = Object.values(maxWidth);
+
+        // Generar archivo
+        const fecha = new Date().toISOString().split('T')[0];
+        XLSX.writeFile(workbook, `registro_celulares_${fecha}.xlsx`);
+        this.mostrarNotificacion('Archivo Excel exportado exitosamente', 'success');
+    }
+
+    filtrarYRenderizar() {
+        const celularesFiltrados = this.state.celulares.filter(celular => {
+            const coincideBusqueda = !this.state.filtros.busqueda || 
+                celular.modelo.toLowerCase().includes(this.state.filtros.busqueda.toLowerCase()) ||
+                celular.imei.includes(this.state.filtros.busqueda);
+            
+            const coincideModelo = !this.state.filtros.modelo || 
+                celular.modelo.toLowerCase().includes(this.state.filtros.modelo.toLowerCase());
+            
+            const coincideEstado = !this.state.filtros.estado || 
+                this.obtenerEstadoBateria(celular) === this.state.filtros.estado;
+
+            return coincideBusqueda && coincideModelo && coincideEstado;
+        });
+
+        this.renderizarRegistros(celularesFiltrados);
+    }
+
+    obtenerEstadoBateria(celular) {
+        const promedioBateria = (parseInt(celular.bateria3u) + parseInt(celular.bateriaDevice)) / 2;
+        if (promedioBateria >= 90) return 'optima';
+        if (promedioBateria >= 80) return 'buena';
+        if (promedioBateria >= 70) return 'regular';
+        return 'baja';
+    }
+
+    // Renderizado de registros
+    renderizarRegistros(celulares = this.state.celulares) {
+        const container = document.getElementById('lista-registros');
+        if (!container) {
+            console.error('No se encontró el contenedor lista-registros');
+            return;
+        }
+
+        // Limpiar el contenedor
+        container.innerHTML = '';
+
+        // Si no hay registros
+        if (celulares.length === 0) {
+            container.innerHTML = '<div class="no-registros">No hay registros para mostrar</div>';
+            return;
+        }
+
+        // Renderizar cada celular
+        celulares.forEach(celular => {
+            const tarjeta = this.generarTarjetaCelular(celular);
+            container.insertAdjacentHTML('beforeend', tarjeta);
+        });
+    }
+
+    generarTarjetaCelular(celular) {
+        const estadoBateria = this.obtenerEstadoBateria(celular);
+        return `
+            <div class="celular-card">
+                <div class="celular-header">
+                    <h3>${celular.modelo} ${celular.variante || ''}</h3>
+                    <span class="badge badge-${estadoBateria}">${estadoBateria}</span>
+                </div>
+                <div class="celular-info">
+                    <div class="info-item">
+                        <span class="label">IMEI:</span>
+                        <span class="value">${celular.imei}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Almacenamiento:</span>
+                        <span class="value">${celular.almacenamiento} GB</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Batería:</span>
+                        <span class="value">${celular.bateria3u}%</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Estado:</span>
+                        <span class="value">${celular.directoVenta ? 'Directo a Venta' : 'En Revisión'}</span>
+                    </div>
+                </div>
+                <div class="celular-actions">
+                    <button class="action-btn" onclick="window.gestor.editarCelular('${celular.id}')">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="action-btn delete" onclick="window.gestor.eliminarCelular('${celular.id}')">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+        `;
+    }
+
+    // Actualización de estadísticas
+    actualizarEstadisticas() {
+        // Contadores para el dashboard
+        const stats = {
+            total: this.state.celulares.length,
+            excelente: this.state.celulares.filter(c => c.limpieza === 'Excelente').length,
+            optima: this.state.celulares.filter(c => c.bateria === 'Óptima').length,
+            ultimoMes: this.state.celulares.filter(c => {
+                const unMesAtras = new Date();
+                unMesAtras.setMonth(unMesAtras.getMonth() - 1);
+                return new Date(c.fecha) > unMesAtras;
+            }).length
+        };
+
+        // Actualizar contadores en el DOM
+        document.getElementById('total-celulares').textContent = stats.total;
+        document.getElementById('estado-excelente').textContent = stats.excelente;
+        document.getElementById('bateria-optima').textContent = stats.optima;
+        document.getElementById('ultimo-mes').textContent = stats.ultimoMes;
+
+        // Actualizar gráficos
+        this.actualizarGraficos();
+    }
+
+    // Actualización de gráficos
+    actualizarGraficos() {
+        // Datos para el gráfico de estados
+        const estadosData = {
+            Excelente: 0,
+            'Muy Bueno': 0,
+            Bueno: 0,
+            Regular: 0
+        };
+
+        // Datos para el gráfico de baterías
+        const bateriasData = {
+            Óptima: 0,
+            Buena: 0,
+            Regular: 0,
+            Baja: 0
+        };
+
+        this.state.celulares.forEach(celular => {
+            estadosData[celular.limpieza]++;
+            bateriasData[celular.bateria]++;
+        });
+
+        // Actualizar gráfico de estados
+        state.charts.estados.data.datasets[0].data = Object.values(estadosData);
+        state.charts.estados.update();
+
+        // Actualizar gráfico de baterías
+        state.charts.baterias.data.datasets[0].data = Object.values(bateriasData);
+        state.charts.baterias.update();
+    }
+
+    // Edición de celular
+    editarCelular(id) {
+        const celular = this.state.celulares.find(c => c.id === id);
+        if (!celular) return;
+
+        // Rellenar formulario con datos del celular
+        const form = document.getElementById('formulario-registro');
+        Object.keys(celular).forEach(key => {
+            const input = form.elements[key];
+            if (input) input.value = celular[key];
+        });
+
+        // Cambiar el comportamiento del formulario temporalmente
+        form.onsubmit = (e) => {
+            e.preventDefault();
+            const formData = new FormData(form);
+            const celularActualizado = {
+                ...celular,
+                modelo: formData.get('modelo'),
+                imei: formData.get('imei'),
+                limpieza: formData.get('limpieza'),
+                bateria: formData.get('bateria'),
+                almacenamiento: formData.get('almacenamiento'),
+                color: formData.get('color'),
+                observaciones: formData.get('observaciones')
+            };
+
+            const index = this.state.celulares.findIndex(c => c.id === id);
+            this.state.celulares[index] = celularActualizado;
+            this.guardarDatos();
+            this.actualizarEstadisticas();
+            this.renderizarRegistros();
+            this.mostrarNotificacion('Celular actualizado exitosamente', 'success');
+            form.reset();
+            form.onsubmit = (e) => {
+                e.preventDefault();
+                this.registrarCelular();
+            };
+        };
+    }
+
+    // Eliminación de celular
+    eliminarCelular(id) {
+        if (!confirm('¿Está seguro de eliminar este registro?')) return;
+
+        this.state.celulares = this.state.celulares.filter(c => c.id !== id);
+        this.guardarDatos();
+        this.actualizarEstadisticas();
+        this.renderizarRegistros();
+        this.mostrarNotificacion('Celular eliminado exitosamente', 'success');
+    }
+
+    // Autocompletado de modelo
+    setupModeloAutocompletado() {
+        const input = document.getElementById('modelo');
+        const sugerencias = document.createElement('div');
+        sugerencias.className = 'modelo-suggestions';
+        input.parentNode.appendChild(sugerencias);
+
+        const modelos = [
+            'iPhone 11', 'iPhone 12', 'iPhone 13', 'iPhone 14',
+            'Samsung Galaxy S20', 'Samsung Galaxy S21', 'Samsung Galaxy S22',
+            'Xiaomi Redmi Note 10', 'Xiaomi Redmi Note 11',
+            'Motorola G60', 'Motorola Edge 30'
+        ];
+
+        input.addEventListener('input', () => {
+            const valor = input.value.toLowerCase();
+            if (valor.length < 2) {
+                sugerencias.style.display = 'none';
+        return;
+    }
+
+            const coincidencias = modelos.filter(modelo => 
+                modelo.toLowerCase().includes(valor)
+            );
+
+            if (coincidencias.length > 0) {
+                sugerencias.innerHTML = coincidencias.map(modelo => `
+                    <div class="sugerencia-item">${modelo}</div>
+                `).join('');
+                sugerencias.style.display = 'block';
+
+                sugerencias.querySelectorAll('.sugerencia-item').forEach(item => {
+                    item.addEventListener('click', () => {
+                        input.value = item.textContent;
+                        sugerencias.style.display = 'none';
+                    });
+                });
+            } else {
+                sugerencias.style.display = 'none';
+            }
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!input.contains(e.target) && !sugerencias.contains(e.target)) {
+                sugerencias.style.display = 'none';
+            }
+        });
+    }
+
+    // Utilidades
+    guardarDatos() {
+        localStorage.setItem(CONFIG.STORAGE_KEY, JSON.stringify(this.state.celulares));
+    }
+
+    actualizarVistaActiva() {
+        document.querySelectorAll('.vista-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.vista === this.state.vistaActual);
+        });
+        document.getElementById('lista-registros').className = this.state.vistaActual;
+    }
+
+    actualizarPaginacion() {
+        const paginacionEl = document.getElementById('paginacion');
+        if (this.state.paginacion.total <= 1) {
+            paginacionEl.style.display = 'none';
+        return;
+    }
+
+        paginacionEl.style.display = 'flex';
+        paginacionEl.innerHTML = `
+            <button class="button" ${this.state.paginaActual === 1 ? 'disabled' : ''} 
+                    onclick="gestor.cambiarPagina(${this.state.paginaActual - 1})">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <span>Página ${this.state.paginaActual} de ${this.state.paginacion.total}</span>
+            <button class="button" ${this.state.paginaActual === this.state.paginacion.total ? 'disabled' : ''} 
+                    onclick="gestor.cambiarPagina(${this.state.paginaActual + 1})">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        `;
+    }
+
+    cambiarPagina(pagina) {
+        if (pagina < 1 || pagina > this.state.paginacion.total) return;
+        this.state.paginaActual = pagina;
+        this.renderizarRegistros();
+    }
+
+    mostrarNotificacion(mensaje, tipo = 'info') {
+        const toast = document.createElement('div');
+        toast.className = `toast toast-${tipo}`;
+        toast.innerHTML = `
+            <div class="toast-content">
+                <i class="ri-${this.getToastIcon(tipo)}"></i>
+                <span>${mensaje}</span>
+            </div>
+        `;
+        document.body.appendChild(toast);
+        setTimeout(() => {
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }, 100);
+    }
+
+    getToastIcon(tipo) {
+        switch (tipo) {
+            case 'success': return 'checkbox-circle-line';
+            case 'error': return 'error-warning-line';
+            case 'warning': return 'alert-line';
+            default: return 'information-line';
+        }
+    }
+
+    mostrarEstadisticas() {
+        document.getElementById('modal-estadisticas').classList.add('active');
+    }
+
+    cerrarModal() {
+        document.getElementById('modal-estadisticas').classList.remove('active');
+    }
+}
+
+// Función de utilidad para debounce
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
+// Función para actualizar variantes según el modelo
+function actualizarVariantes() {
+    const modeloSelect = document.getElementById('Modelo');
+    const varianteSelect = document.getElementById('Variante');
+    const modelo = modeloSelect.value;
+
+    // Limpiar opciones actuales
+    varianteSelect.innerHTML = '<option value="">Seleccionar Variante</option>';
+
+    // Si existe el modelo en la configuración
+    if (CONFIG.MODELOS_IPHONE[modelo]) {
+        CONFIG.MODELOS_IPHONE[modelo].forEach(variante => {
+            const option = document.createElement('option');
+            option.value = variante;
+            option.textContent = variante;
+            varianteSelect.appendChild(option);
+        });
+    }
+}
+
+// Event Listener cuando se carga la página
+document.addEventListener('DOMContentLoaded', () => {
+    window.gestor = new GestorCelulares();
     
-    // Event listeners
+    // Inicializar el formulario
+    const formulario = document.getElementById('formulario-registro');
+    if (formulario) {
+        formulario.addEventListener('submit', (e) => {
+            e.preventDefault();
+            window.gestor.registrarCelular();
+        });
+    }
+
+    // Inicializar selector de modelo
     const modeloSelect = document.getElementById('Modelo');
     if (modeloSelect) {
-        modeloSelect.addEventListener('change', ActualizarVariantes);
+        modeloSelect.addEventListener('change', actualizarVariantes);
     }
+});
 
-    const busquedaInput = document.getElementById('busqueda');
-    if (busquedaInput) {
-        busquedaInput.addEventListener('input', FiltrarRegistros);
-    }
-
-    const filtroModelo = document.getElementById('filtro-modelo');
-    if (filtroModelo) {
-        filtroModelo.addEventListener('change', FiltrarRegistros);
-    }
-
-    const filtroEstado = document.getElementById('filtro-estado');
-    if (filtroEstado) {
-        filtroEstado.addEventListener('change', FiltrarRegistros);
-    }
-
-    // Verificar alertas cada 5 minutos
-    setInterval(VerificarAlertas, CONFIG.ALERTAS.INTERVALO_VERIFICACION);
+// Manejo del tema oscuro/claro
+document.getElementById('theme-toggle').addEventListener('click', () => {
+    document.documentElement.setAttribute('data-theme', 
+        document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'
+    );
 });

@@ -1,251 +1,287 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-theme="light">
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Celulares Usados</title>
+        <title>Gestión de Celulares Usados</title>
+        <!-- Estilos -->
         <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet" />
         <link rel="stylesheet" href="../css/global.css" />
         <link rel="stylesheet" href="../css/CelusUsados.css" />
+        <!-- Scripts -->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     </head>
 
     <body>
-        <div class="top-bar">
-            <button id="menu-btn" class="menu-button">
+        <!-- Barra Superior -->
+        <div class="top-bar glass-effect">
+            <button class="button" onclick="toggleSidebar()" aria-label="Menú">
                 <i class="ri-menu-line"></i>
             </button>
-            <h1>Celulares Usados</h1>
-            <button id="theme-btn" class="theme-button">
-                <i class="ri-sun-line"></i>
+            <h1 class="text-gradient">Gestión de Celulares Usados</h1>
+            <button class="button theme-toggle" onclick="toggleTheme()" aria-label="Cambiar tema">
+                <i class="ri-moon-line"></i>
             </button>
         </div>
 
-        <div class="sidebar">
-            <button class="close-btn">
-                <i class="ri-close-line"></i>
-            </button>
-            <div class="sidebar-links">
-                <a href="../index.html">
-                    <i class="ri-home-line"></i>
-                    <span>Inicio</span>
-                </a>
-                <a href="StockReparar.html">
-                    <i class="ri-tools-line"></i>
-                    <span>Stock Reparar</span>
-                </a>
-                <a href="ReservaRepuestos.html">
-                    <i class="ri-calendar-line"></i>
-                    <span>Reserva Repuestos</span>
-                </a>
-                <a href="OrganizadorInsumos.html">
-                    <i class="ri-archive-line"></i>
-                    <span>Organizador Insumos</span>
-                </a>
-                <a href="CotizacionUsados.html">
-                    <i class="ri-money-dollar-circle-line"></i>
-                    <span>Cotización Usados</span>
-                </a>
-            </div>
-        </div>
-
-        <div class="main-content">
-            <div class="dashboard-header">
-                <div class="dashboard-stats">
-                    <div class="stat-card">
-                        <i class="ri-smartphone-line"></i>
-                        <div class="stat-info">
-                            <span class="stat-value" id="total-registros">0</span>
-                            <span class="stat-label">Total Registros</span>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <i class="ri-battery-2-charge-line"></i>
-                        <div class="stat-info">
-                            <span class="stat-value" id="bateria-optima">0</span>
-                            <span class="stat-label">Batería Óptima</span>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <i class="ri-shopping-bag-line"></i>
-                        <div class="stat-info">
-                            <span class="stat-value" id="listos-venta">0</span>
-                            <span class="stat-label">Listos para Venta</span>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <i class="ri-line-chart-line"></i>
-                        <div class="stat-info">
-                            <span class="stat-value" id="tendencia">0%</span>
-                            <span class="stat-label">Tendencia Mensual</span>
-                        </div>
-                    </div>
-                </div>
-                <button onclick="MostrarEstadisticas()" class="button stats-button">
-                    <i class="ri-bar-chart-line"></i>
-                    Estadísticas Detalladas
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-content">
+                <button class="button close-btn" onclick="toggleSidebar()" aria-label="Cerrar menú">
+                    <i class="ri-close-line"></i>
                 </button>
+                <nav>
+                    <a href="../index.html" class="fade-in">
+                        <i class="ri-home-line"></i>
+                        Inicio
+                    </a>
+                    <a href="StockReparar.html" class="fade-in">
+                        <i class="ri-tools-line"></i>
+                        Stock de Reparación
+                    </a>
+                    <a href="CotizacionUsados.html" class="fade-in">
+                        <i class="ri-money-dollar-circle-line"></i>
+                        Cotización Usados
+                    </a>
+                    <a href="OrganizadorInsumos.html" class="fade-in">
+                        <i class="ri-archive-line"></i>
+                        Organizador de Insumos
+                    </a>
+                    <a href="ReservaRepuestos.html" class="fade-in">
+                        <i class="ri-settings-2-line"></i>
+                        Reserva de Repuestos
+                    </a>
+                </nav>
             </div>
+        </div>
 
-            <div class="formulario-container">
-                <h2>
-                    <i class="ri-smartphone-line"></i>
-                    Registrar Celular
-                </h2>
-                <form id="formulario-registro" onsubmit="event.preventDefault(); ProcesarDatos();">
-                    <div class="form-group">
-                        <select id="Modelo" name="Modelo" required class="form-input">
-                            <option value="">Seleccionar Modelo</option>
-                            <option value="iPhone 14 Pro">iPhone 14 Pro</option>
-                            <option value="iPhone 14">iPhone 14</option>
-                            <option value="iPhone 13 Pro">iPhone 13 Pro</option>
-                            <option value="iPhone 13">iPhone 13</option>
-                            <option value="iPhone 12 Pro">iPhone 12 Pro</option>
-                            <option value="iPhone 12">iPhone 12</option>
-                            <option value="iPhone 11 Pro">iPhone 11 Pro</option>
-                            <option value="iPhone 11">iPhone 11</option>
-                            <option value="iPhone XS">iPhone XS</option>
-                            <option value="iPhone XR">iPhone XR</option>
-                            <option value="iPhone X">iPhone X</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <select id="Variante" name="Variante" required class="form-input">
-                            <option value="">Seleccionar Variante</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <select id="Storage" name="Storage" required class="form-input">
-                            <option value="">Seleccionar Almacenamiento</option>
-                            <option value="64">64 GB</option>
-                            <option value="128">128 GB</option>
-                            <option value="256">256 GB</option>
-                            <option value="512">512 GB</option>
-                            <option value="1024">1 TB</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <input type="text" id="IMEI" name="IMEI" placeholder="IMEI" required class="form-input" pattern="\d{15}" title="El IMEI debe tener 15 dígitos">
-                    </div>
-
-                    <div class="form-group">
-                        <input type="number" id="Bateria3u" name="Bateria3u" placeholder="Batería 3uTools (%)" required class="form-input" min="0" max="100">
-                    </div>
-
-                    <div class="form-group">
-                        <input type="number" id="BateriaDevice" name="BateriaDevice" placeholder="Batería Device (%)" required class="form-input" min="0" max="100">
-                    </div>
-
-                    <div class="form-group">
-                        <select id="Limpieza" name="Limpieza" required class="form-input">
-                            <option value="">Estado de Limpieza</option>
-                            <option value="Completa">Completa</option>
-                            <option value="Parcial">Parcial</option>
-                            <option value="Pendiente">Pendiente</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <select id="DirectoVenta" name="DirectoVenta" required class="form-input">
-                            <option value="">¿Directo a Venta?</option>
-                            <option value="Si">Sí</option>
-                            <option value="No">No</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <input type="text" id="Proveedor" name="Proveedor" placeholder="Proveedor" required class="form-input">
-                    </div>
-
-                    <div class="form-group">
-                        <textarea id="Detalles" name="Detalles" placeholder="Detalles adicionales" class="form-input"></textarea>
-                    </div>
-
-                    <div class="form-actions">
-                        <button type="submit" class="button">
-                            <i class="ri-save-line"></i>
-                            Guardar
-                        </button>
-                        <button type="reset" class="button button-secondary">
-                            <i class="ri-refresh-line"></i>
-                            Limpiar
-                        </button>
-                    </div>
-                </form>
-            </div>
-
-            <div class="registros-container">
-                <div class="registros-header">
+        <!-- Contenido Principal -->
+        <main class="main-content">
+            <!-- Columna Izquierda - Formulario -->
+            <div class="columna-izquierda">
+                <!-- Formulario -->
+                <div class="formulario-container">
                     <h2>
-                        <i class="ri-list-check-line"></i>
-                        Registros
+                        <i class="ri-smartphone-line"></i>
+                        Registrar Celular
                     </h2>
-                    <div class="registros-actions">
-                        <div class="filtros">
-                            <input type="text" id="busqueda" placeholder="Buscar por IMEI o modelo..." class="form-input">
-                            <select id="filtro-modelo" class="form-input">
-                                <option value="">Todos los modelos</option>
-                                <option value="iPhone 14 Pro">iPhone 14 Pro</option>
-                                <option value="iPhone 14">iPhone 14</option>
-                                <option value="iPhone 13 Pro">iPhone 13 Pro</option>
-                                <option value="iPhone 13">iPhone 13</option>
-                                <option value="iPhone 12 Pro">iPhone 12 Pro</option>
-                                <option value="iPhone 12">iPhone 12</option>
-                                <option value="iPhone 11 Pro">iPhone 11 Pro</option>
-                                <option value="iPhone 11">iPhone 11</option>
+                    <form id="formulario-registro" onsubmit="event.preventDefault(); ProcesarRegistro();">
+                        <div class="form-group">
+                            <select id="Modelo" class="form-input" onchange="actualizarVariantes()" required>
+                                <option value="">Seleccionar Modelo</option>
+                                <option value="iPhone X">iPhone X</option>
                                 <option value="iPhone XS">iPhone XS</option>
                                 <option value="iPhone XR">iPhone XR</option>
-                                <option value="iPhone X">iPhone X</option>
-                            </select>
-                            <select id="filtro-estado" class="form-input">
-                                <option value="">Todos los estados</option>
-                                <option value="optima">Batería Óptima</option>
-                                <option value="venta">Directo a Venta</option>
-                            </select>
-                            <select id="orden" class="form-input">
-                                <option value="fecha-desc">Más recientes primero</option>
-                                <option value="fecha-asc">Más antiguos primero</option>
-                                <option value="bateria-desc">Mayor batería primero</option>
-                                <option value="bateria-asc">Menor batería primero</option>
-                                <option value="modelo">Por modelo</option>
+                                <option value="iPhone 11">iPhone 11</option>
+                                <option value="iPhone 12">iPhone 12</option>
+                                <option value="iPhone 13">iPhone 13</option>
+                                <option value="iPhone 14">iPhone 14</option>
+                                <option value="iPhone 15">iPhone 15</option>
                             </select>
                         </div>
-                        <div class="acciones">
-                            <div class="vista-botones">
-                                <button class="button vista-btn active" data-vista="grid">
-                                    <i class="ri-grid-fill"></i>
-                                </button>
-                                <button class="button vista-btn" data-vista="lista">
-                                    <i class="ri-list-check"></i>
-                                </button>
+
+                        <div class="form-group">
+                            <select id="Variante" name="Variante" required class="form-input">
+                                <option value="">Seleccionar Variante</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="imei-container">
+                                <input type="text" 
+                                       id="IMEI" 
+                                       name="IMEI" 
+                                       placeholder="IMEI (15 dígitos)" 
+                                       required 
+                                       class="form-input" 
+                                       maxlength="15"
+                                       minlength="15"
+                                       pattern="\d{15}"
+                                       onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                                       oninput="actualizarContadorIMEI(this.value)">
+                                <span id="imei-counter" class="imei-counter">0/15</span>
                             </div>
-                            <button onclick="ExportarExcel()" class="button">
-                                <i class="ri-file-excel-line"></i>
-                                Excel
+                            <small class="input-help">El IMEI debe contener exactamente 15 dígitos numéricos</small>
+                        </div>
+
+                        <div class="form-group">
+                            <select id="almacenamiento" name="almacenamiento" required class="form-input">
+                                <option value="">Seleccionar Almacenamiento</option>
+                                <option value="64">64 GB</option>
+                                <option value="128">128 GB</option>
+                                <option value="256">256 GB</option>
+                                <option value="512">512 GB</option>
+                                <option value="1024">1 TB</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <input type="number" 
+                                   id="bateria3u" 
+                                   name="bateria3u" 
+                                   class="form-input" 
+                                   placeholder="Batería 3uTools (%)" 
+                                   required 
+                                   min="0" 
+                                   max="100">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="number" 
+                                   id="bateriaDevice" 
+                                   name="bateriaDevice" 
+                                   class="form-input" 
+                                   placeholder="Batería Device (%)" 
+                                   required 
+                                   min="0" 
+                                   max="100">
+                        </div>
+
+                        <div class="form-group">
+                            <select id="limpieza" name="limpieza" required class="form-input">
+                                <option value="">Estado de Limpieza</option>
+                                <option value="completa">Completa</option>
+                                <option value="parcial">Parcial</option>
+                                <option value="pendiente">Pendiente</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <select id="directoVenta" name="directoVenta" required class="form-input">
+                                <option value="">¿Directo a Venta?</option>
+                                <option value="si">Sí</option>
+                                <option value="no">No</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" 
+                                   id="proveedor" 
+                                   name="proveedor" 
+                                   class="form-input" 
+                                   placeholder="Proveedor" 
+                                   required>
+                        </div>
+
+                        <div class="form-group">
+                            <textarea id="detalles" 
+                                      name="detalles" 
+                                      class="form-input" 
+                                      placeholder="Detalles adicionales"></textarea>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="button">
+                                <i class="ri-save-line"></i>
+                                Guardar
                             </button>
-                            <button onclick="ExportarStickers()" class="button">
+                            <button type="reset" class="button button-secondary">
+                                <i class="ri-refresh-line"></i>
+                                Limpiar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Columna Derecha - Dashboard y Registros -->
+            <div class="columna-derecha">
+                <!-- Dashboard -->
+                <div class="dashboard-header">
+                    <div class="dashboard-stats">
+                        <div class="stat-card">
+                            <i class="ri-smartphone-line"></i>
+                            <div class="stat-info">
+                                <span class="stat-value" id="total-registros">0</span>
+                                <span class="stat-label">Total Registros</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <i class="ri-battery-2-charge-line"></i>
+                            <div class="stat-info">
+                                <span class="stat-value" id="bateria-optima">0</span>
+                                <span class="stat-label">Batería Óptima</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <i class="ri-shopping-bag-line"></i>
+                            <div class="stat-info">
+                                <span class="stat-value" id="listos-venta">0</span>
+                                <span class="stat-label">Listos para Venta</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <i class="ri-line-chart-line"></i>
+                            <div class="stat-info">
+                                <span class="stat-value" id="tendencia">0%</span>
+                                <span class="stat-label">Tendencia Mensual</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Controles -->
+                <div class="controles-container">
+                    <div class="filtros">
+                        <div class="busqueda-container">
+                            <i class="ri-search-line"></i>
+                            <input type="text" 
+                                   class="busqueda-input" 
+                                   placeholder="Buscar por IMEI o modelo..."
+                                   id="busqueda">
+                        </div>
+                        <select class="filtro-select" id="filtro-modelo">
+                            <option value="">Todos los modelos</option>
+                            <option value="iphone">iPhone</option>
+                            <option value="samsung">Samsung</option>
+                            <option value="xiaomi">Xiaomi</option>
+                        </select>
+                        <select class="filtro-select" id="filtro-estado">
+                            <option value="">Todos los estados</option>
+                            <option value="optima">Batería Óptima</option>
+                            <option value="buena">Batería Buena</option>
+                            <option value="regular">Batería Regular</option>
+                            <option value="baja">Batería Baja</option>
+                        </select>
+                    </div>
+                    <div class="acciones">
+                        <div class="vista-botones">
+                            <button class="vista-btn active" data-vista="grid">
+                                <i class="ri-grid-fill"></i>
+                            </button>
+                            <button class="vista-btn" data-vista="lista">
+                                <i class="ri-list-unordered"></i>
+                            </button>
+                        </div>
+                        <div class="acciones-secundarias">
+                            <button class="accion-btn">
+                                <i class="ri-file-excel-line"></i>
+                                Exportar Excel
+                            </button>
+                            <button class="accion-btn secundario">
                                 <i class="ri-printer-line"></i>
-                                Stickers
+                                Imprimir
                             </button>
                         </div>
                     </div>
                 </div>
-                <div id="lista-registros" class="vista-grid"></div>
+
+                <!-- Equipos Registrados -->
+                <div class="equipos-container">
+                    <div id="lista-registros" class="equipos-grid"></div>
+                </div>
             </div>
-        </div>
+        </main>
 
         <!-- Modal de Estadísticas -->
         <div id="modal-estadisticas" class="modal">
             <div class="modal-content">
                 <div class="modal-header">
                     <h2>Estadísticas Detalladas</h2>
-                    <button onclick="CerrarModal('modal-estadisticas')" class="button-icon">
+                    <button onclick="cerrarModal('modal-estadisticas')" class="button">
                         <i class="ri-close-line"></i>
                     </button>
                 </div>
@@ -253,11 +289,11 @@
                     <div class="stats-grid">
                         <div class="stat-detail-card">
                             <h3>Distribución por Modelo</h3>
-                            <canvas id="graficoModelos"></canvas>
+                            <canvas id="grafico-distribucion"></canvas>
                         </div>
                         <div class="stat-detail-card">
                             <h3>Tendencia de Registros</h3>
-                            <canvas id="graficoTendencia"></canvas>
+                            <canvas id="grafico-tendencias"></canvas>
                         </div>
                         <div class="stat-detail-card">
                             <h3>Promedios de Batería</h3>
@@ -268,7 +304,10 @@
             </div>
         </div>
 
+        <!-- Toast Container -->
         <div id="toast-container" class="toast-container"></div>
+
+        <!-- Scripts -->
         <script src="../js/global.js"></script>
         <script src="../js/CelusUsados.js"></script>
     </body>
